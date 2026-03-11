@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cours Code Commenté - Exemples pratiques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#111827;--bg2:#1f2937;--bg3:#374151;
+  --border:#374151;--border2:#4b5563;
+  --text:#f9fafb;--text2:#d1d5db;--text3:#9ca3af;
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.1);
+  --green:#34d399;--green-bg:rgba(52,211,153,.1);
+  --yellow:#fbbf24;--yellow-bg:rgba(251,191,36,.1);
+  --red:#f87171;--red-bg:rgba(248,113,113,.1);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,.1);
+  --cyan:#67e8f9;--orange:#fb923c;--pink:#f472b6;
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'Fira Code',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:.75rem 1.5rem 1.25rem;border-bottom:1px solid var(--border);margin-bottom:.75rem}
+.sidebar-logo h1{font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sidebar-logo span{font-size:.72rem;color:var(--text3);margin-top:.2rem;display:block}
+.s-cat{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:.5rem 1.5rem .25rem;display:block}
+.sidebar a{display:block;padding:.38rem 1.5rem;font-size:.81rem;color:var(--text3);text-decoration:none;transition:.15s;border-left:2px solid transparent}
+.sidebar a:hover{color:var(--text2);background:rgba(255,255,255,.03)}
+.sidebar a.on{color:var(--blue);border-left-color:var(--blue);background:var(--blue-bg)}
+
+/* Contenu */
+.main{overflow-x:hidden}
+.main-header{padding:1rem 2.5rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.main-header h1{font-size:.9rem;font-weight:700;color:var(--text2)}
+.badge-count{font-size:.72rem;background:var(--blue-bg);color:var(--blue);border:1px solid rgba(96,165,250,.3);padding:.2rem .6rem;border-radius:50px;font-family:var(--mono)}
+
+.main-inner{max-width:900px;margin:0 auto;padding:2.5rem 2rem}
+
+/* Section */
+.section{margin-bottom:4.5rem}
+.section-head{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.section-head h2{font-size:1.35rem;font-weight:800;margin-bottom:.3rem}
+.section-head p{font-size:.88rem;color:var(--text3)}
+
+/* Bloc de code */
+.code-block{margin:1.5rem 0;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.code-header{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);padding:.6rem 1rem;border-bottom:1px solid var(--border)}
+.code-header-left{display:flex;align-items:center;gap:.75rem}
+.dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.code-lang{font-family:var(--mono);font-size:.72rem;font-weight:600;color:var(--text3);letter-spacing:.06em}
+.code-title{font-size:.8rem;font-weight:600;color:var(--text2)}
+.copy-btn{font-size:.72rem;padding:.3rem .7rem;background:transparent;border:1px solid var(--border2);color:var(--text3);border-radius:5px;cursor:pointer;font-family:var(--mono);transition:.15s}
+.copy-btn:hover{background:var(--border);color:var(--text)}
+.copy-btn.copied{color:var(--green);border-color:var(--green)}
+
+pre{background:#0d1117;overflow-x:auto;padding:1.25rem 1.5rem;font-family:var(--mono);font-size:.82rem;line-height:1.85;tab-size:2}
+code{font-family:var(--mono);color:var(--text2)}
+
+/* Syntaxe highlight manuelle */
+.cm{color:#6a9955;font-style:italic}      /* commentaire */
+.ck{color:var(--purple)}                   /* keyword: const, let, function... */
+.cs{color:var(--green)}                    /* string */
+.cn{color:var(--orange)}                   /* number */
+.cf{color:var(--blue)}                     /* function name */
+.ct{color:var(--yellow)}                   /* tag html */
+.ca{color:var(--cyan)}                     /* attribute */
+.cv{color:var(--red)}                      /* value / class css */
+.cp{color:var(--text2)}                    /* punctuation */
+.cx{color:var(--pink)}                     /* property css */
+
+/* Annotation latérale */
+.annotated{display:grid;grid-template-columns:1fr 220px;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:1.5rem 0}
+.annotated pre{border-radius:0;border:none;border-right:1px solid var(--border)}
+.annotations{background:#0a0f1a;padding:1rem;display:flex;flex-direction:column;gap:.5rem}
+.ann{font-size:.75rem;color:var(--text3);padding:.4rem .6rem;border-left:2px solid var(--border2);line-height:1.5}
+.ann strong{color:var(--yellow);display:block;font-size:.7rem;margin-bottom:.15rem}
+
+/* Comparaison */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.compare-card{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.compare-header{padding:.5rem 1rem;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.good .compare-header{background:var(--green-bg);color:var(--green)}
+.bad  .compare-header{background:var(--red-bg);color:var(--red)}
+.compare-card pre{border-radius:0;font-size:.78rem;padding:1rem}
+
+/* Explication */
+.explain{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:.75rem 0;font-size:.85rem;color:var(--text2)}
+.explain strong{color:var(--blue)}
+.explain code{font-family:var(--mono);background:var(--bg3);padding:.1em .35em;border-radius:3px;font-size:.85em;color:var(--yellow)}
+
+/* Steps */
+.steps{counter-reset:step;margin:1rem 0}
+.step{display:flex;gap:1rem;margin-bottom:1rem;align-items:flex-start}
+.step::before{counter-increment:step;content:counter(step);width:26px;height:26px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;color:white;margin-top:.1rem}
+.step-body{font-size:.87rem;color:var(--text2)}
+.step-body strong{color:var(--text)}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}.sidebar{display:none}
+  .annotated{grid-template-columns:1fr}.annotations{display:none}
+  .compare{grid-template-columns:1fr}
+  .main-inner{padding:1.5rem 1rem}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h1>{'</> Code Commenté'}</h1>
+    <span>Exemples pratiques avec explications</span>
+  </div>
+  <nav>
+    <span class="s-cat">HTML5</span>
+    <a href="#html-page">Structure de page</a>
+    <a href="#html-formulaire">Formulaire accessible</a>
+    <a href="#html-nav">Navigation sémantique</a>
+    <span class="s-cat">CSS3</span>
+    <a href="#css-variables">Variables & reset</a>
+    <a href="#css-flex">Flexbox layouts</a>
+    <a href="#css-grid">CSS Grid</a>
+    <a href="#css-responsive">Media queries</a>
+    <a href="#css-animation">Transitions & animations</a>
+    <span class="s-cat">JavaScript</span>
+    <a href="#js-dom">Manipulation DOM</a>
+    <a href="#js-events">Gestion d'événements</a>
+    <a href="#js-fetch">fetch() AJAX</a>
+    <a href="#js-form">Validation de formulaire</a>
+    <a href="#js-burger">Menu burger complet</a>
+  </nav>
+</aside>
+
+<!-- ═══ CONTENU ═══ -->
+<div class="main">
+<div class="main-header">
+  <h1>Cours Code Commenté - Lire, comprendre, adapter</h1>
+  <span class="badge-count">15 exemples</span>
+</div>
+<div class="main-inner">
+
+<!-- ════════ HTML ════════ -->
+<div class="section" id="html-page">
+  <div class="section-head">
+    <h2>🟠 HTML5 - Structure de page</h2>
+    <p>La structure HTML5 complète d'une page sémantique</p>
+  </div>
+
+  <div class="annotated">
+    <pre><code><span class="cm">&lt;!-- Déclaration DOCTYPE : obligatoire en HTML5 --&gt;</span>
+<span class="ct">&lt;!DOCTYPE html&gt;</span>
+
+<span class="cm">&lt;!-- lang="fr" : essentiel pour l'accessibilité --&gt;</span>
+<span class="ct">&lt;html</span> <span class="ca">lang</span>=<span class="cs">"fr"</span><span class="ct">&gt;</span>
+
+<span class="ct">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- UTF-8 : encode tous les caractères spéciaux --&gt;</span>
+  <span class="ct">&lt;meta</span> <span class="ca">charset</span>=<span class="cs">"UTF-8"</span><span class="ct">/&gt;</span>
+
+  <span class="cm">&lt;!-- viewport : INDISPENSABLE pour le responsive --&gt;</span>
+  <span class="ct">&lt;meta</span> <span class="ca">name</span>=<span class="cs">"viewport"</span>
+        <span class="ca">content</span>=<span class="cs">"width=device-width, initial-scale=1.0"</span><span class="ct">/&gt;</span>
+
+  <span class="cm">&lt;!-- description : utilisée par les moteurs de recherche --&gt;</span>
+  <span class="ct">&lt;meta</span> <span class="ca">name</span>=<span class="cs">"description"</span>
+        <span class="ca">content</span>=<span class="cs">"Description concise de la page (150-160 car.)"</span><span class="ct">/&gt;</span>
+
+  <span class="cm">&lt;!-- title : affiché dans l'onglet et résultats Google --&gt;</span>
+  <span class="ct">&lt;title&gt;</span>Titre de la page - Nom du site<span class="ct">&lt;/title&gt;</span>
+
+  <span class="cm">&lt;!-- Feuille de style externe --&gt;</span>
+  <span class="ct">&lt;link</span> <span class="ca">rel</span>=<span class="cs">"stylesheet"</span> <span class="ca">href</span>=<span class="cs">"css/style.css"</span><span class="ct">/&gt;</span>
+<span class="ct">&lt;/head&gt;</span>
+
+<span class="ct">&lt;body&gt;</span>
+
+  <span class="cm">&lt;!-- header : en-tête global de la page --&gt;</span>
+  <span class="ct">&lt;header</span> <span class="ca">role</span>=<span class="cs">"banner"</span><span class="ct">&gt;</span>
+    <span class="ct">&lt;nav</span> <span class="ca">aria-label</span>=<span class="cs">"Navigation principale"</span><span class="ct">&gt;</span>
+      <span class="cm">&lt;!-- menu ici --&gt;</span>
+    <span class="ct">&lt;/nav&gt;</span>
+  <span class="ct">&lt;/header&gt;</span>
+
+  <span class="cm">&lt;!-- main : contenu principal, UNIQUE par page --&gt;</span>
+  <span class="ct">&lt;main</span> <span class="ca">id</span>=<span class="cs">"contenu-principal"</span><span class="ct">&gt;</span>
+
+    <span class="cm">&lt;!-- section : thème distinct, doit avoir un titre --&gt;</span>
+    <span class="ct">&lt;section</span> <span class="ca">aria-labelledby</span>=<span class="cs">"titre-section"</span><span class="ct">&gt;</span>
+      <span class="ct">&lt;h2</span> <span class="ca">id</span>=<span class="cs">"titre-section"</span><span class="ct">&gt;</span>Titre de section<span class="ct">&lt;/h2&gt;</span>
+
+      <span class="cm">&lt;!-- article : contenu autonome (card, post...) --&gt;</span>
+      <span class="ct">&lt;article&gt;</span>
+        <span class="ct">&lt;h3&gt;</span>Titre de l'article<span class="ct">&lt;/h3&gt;</span>
+        <span class="ct">&lt;p&gt;</span>Contenu...<span class="ct">&lt;/p&gt;</span>
+      <span class="ct">&lt;/article&gt;</span>
+    <span class="ct">&lt;/section&gt;</span>
+
+  <span class="ct">&lt;/main&gt;</span>
+
+  <span class="cm">&lt;!-- footer : pied de page, mentions légales --&gt;</span>
+  <span class="ct">&lt;footer</span> <span class="ca">role</span>=<span class="cs">"contentinfo"</span><span class="ct">&gt;</span>
+    <span class="ct">&lt;p&gt;</span>&amp;copy; <span class="ct">&lt;time</span> <span class="ca">datetime</span>=<span class="cs">"2025"</span><span class="ct">&gt;</span>2025<span class="ct">&lt;/time&gt;</span> Mon Site<span class="ct">&lt;/p&gt;</span>
+  <span class="ct">&lt;/footer&gt;</span>
+
+  <span class="cm">&lt;!-- JS en bas du body = ne bloque pas le rendu --&gt;</span>
+  <span class="ct">&lt;script</span> <span class="ca">src</span>=<span class="cs">"js/app.js"</span><span class="ct">&gt;&lt;/script&gt;</span>
+
+<span class="ct">&lt;/body&gt;</span>
+<span class="ct">&lt;/html&gt;</span></code></pre>
+    <div class="annotations">
+      <div class="ann"><strong>DOCTYPE</strong>Active le mode HTML5 standard dans tous les navigateurs</div>
+      <div class="ann"><strong>lang="fr"</strong>Lecteurs d'écran, SEO, correcteurs orthographiques en dépendent</div>
+      <div class="ann"><strong>viewport</strong>Sans cette meta, le site s'affiche comme une version desktop sur mobile</div>
+      <div class="ann"><strong>role="banner"</strong>ARIA pour header global, redondant mais recommandé</div>
+      <div class="ann"><strong>aria-label nav</strong>Distingue la nav principale des autres nav de la page</div>
+      <div class="ann"><strong>aria-labelledby</strong>Lie la section à son titre - meilleure pratique d'accessibilité</div>
+      <div class="ann"><strong>script en bas</strong>Garantit que le DOM est chargé avant d'exécuter le JS</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Formulaire ═══ -->
+<div class="section" id="html-formulaire">
+  <div class="section-head">
+    <h2>🟠 HTML5 - Formulaire accessible</h2>
+    <p>Un formulaire de contact avec toutes les bonnes pratiques</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">HTML</span><span class="code-title">formulaire-contact.html</span></div>
+      <button class="copy-btn" data-code="form-html">Copier</button>
+    </div>
+    <pre id="form-html"><code><span class="cm">&lt;!-- fieldset groupe les champs liés, legend les décrit --&gt;</span>
+<span class="ct">&lt;form</span> <span class="ca">id</span>=<span class="cs">"form-contact"</span>
+      <span class="ca">novalidate</span>
+      <span class="ca">aria-label</span>=<span class="cs">"Formulaire de contact"</span><span class="ct">&gt;</span>
+
+  <span class="ct">&lt;fieldset&gt;</span>
+    <span class="ct">&lt;legend&gt;</span>Vos informations<span class="ct">&lt;/legend&gt;</span>
+
+    <span class="cm">&lt;!-- Groupe : label + input + message d'erreur --&gt;</span>
+    <span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"field-group"</span><span class="ct">&gt;</span>
+
+      <span class="cm">&lt;!-- for="id" associe le label à l'input --&gt;</span>
+      <span class="ct">&lt;label</span> <span class="ca">for</span>=<span class="cs">"nom"</span><span class="ct">&gt;</span>
+        Nom <span class="ct">&lt;span</span> <span class="ca">aria-hidden</span>=<span class="cs">"true"</span><span class="ct">&gt;</span>*<span class="ct">&lt;/span&gt;</span>
+      <span class="ct">&lt;/label&gt;</span>
+
+      <span class="ct">&lt;input</span>
+        <span class="ca">type</span>=<span class="cs">"text"</span>
+        <span class="ca">id</span>=<span class="cs">"nom"</span>
+        <span class="ca">name</span>=<span class="cs">"nom"</span>
+        <span class="ca">required</span>
+        <span class="ca">autocomplete</span>=<span class="cs">"family-name"</span>
+        <span class="ca">aria-describedby</span>=<span class="cs">"nom-erreur"</span>
+        <span class="ca">aria-required</span>=<span class="cs">"true"</span>
+        <span class="ca">placeholder</span>=<span class="cs">"Dupont"</span>
+      <span class="ct">/&gt;</span>
+
+      <span class="cm">&lt;!-- role="alert" annonce l'erreur aux lecteurs d'écran --&gt;</span>
+      <span class="ct">&lt;span</span>
+        <span class="ca">id</span>=<span class="cs">"nom-erreur"</span>
+        <span class="ca">class</span>=<span class="cs">"field-error"</span>
+        <span class="ca">role</span>=<span class="cs">"alert"</span>
+        <span class="ca">aria-live</span>=<span class="cs">"polite"</span>
+      <span class="ct">&gt;&lt;/span&gt;</span>
+
+    <span class="ct">&lt;/div&gt;</span>
+
+    <span class="cm">&lt;!-- Champ email avec validation HTML5 native --&gt;</span>
+    <span class="ct">&lt;div</span> <span class="ca">class</span>=<span class="cs">"field-group"</span><span class="ct">&gt;</span>
+      <span class="ct">&lt;label</span> <span class="ca">for</span>=<span class="cs">"email"</span><span class="ct">&gt;</span>Email<span class="ct">&lt;/span</span> <span class="ca">aria-hidden</span>=<span class="cs">"true"</span><span class="ct">&gt;</span>*<span class="ct">&lt;/span&gt;&lt;/label&gt;</span>
+      <span class="ct">&lt;input</span> <span class="ca">type</span>=<span class="cs">"email"</span> <span class="ca">id</span>=<span class="cs">"email"</span> <span class="ca">name</span>=<span class="cs">"email"</span>
+             <span class="ca">required</span> <span class="ca">autocomplete</span>=<span class="cs">"email"</span>
+             <span class="ca">aria-describedby</span>=<span class="cs">"email-erreur"</span><span class="ct">/&gt;</span>
+      <span class="ct">&lt;span</span> <span class="ca">id</span>=<span class="cs">"email-erreur"</span> <span class="ca">class</span>=<span class="cs">"field-error"</span> <span class="ca">role</span>=<span class="cs">"alert"</span><span class="ct">&gt;&lt;/span&gt;</span>
+    <span class="ct">&lt;/div&gt;</span>
+
+  <span class="ct">&lt;/fieldset&gt;</span>
+
+  <span class="cm">&lt;!-- type="submit" : déclenche l'événement submit --&gt;</span>
+  <span class="ct">&lt;button</span> <span class="ca">type</span>=<span class="cs">"submit"</span><span class="ct">&gt;</span>Envoyer le message<span class="ct">&lt;/button&gt;</span>
+
+<span class="ct">&lt;/form&gt;</span></code></pre>
+  </div>
+
+  <div class="explain"><strong>novalidate</strong> sur le form désactive la validation HTML5 native pour gérer soi-même les erreurs en JS (meilleur contrôle du design et des messages). <code>aria-describedby</code> pointe vers le <code>&lt;span&gt;</code> d'erreur - quand le JS y injecte un message, le lecteur d'écran l'annonce automatiquement.</div>
+</div>
+
+<!-- ════════ CSS ════════ -->
+<div class="section" id="css-variables">
+  <div class="section-head">
+    <h2>🔵 CSS3 - Variables et reset</h2>
+    <p>Base CSS professionnelle avec custom properties</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">CSS</span><span class="code-title">style.css - Variables & reset</span></div>
+      <button class="copy-btn">Copier</button>
+    </div>
+    <pre><code><span class="cm">/* ── Variables CSS (Custom Properties)
+   Déclarées sur :root = accessibles partout ── */</span>
+<span class="cv">:root</span> <span class="cp">{</span>
+  <span class="cm">/* Palette de couleurs */</span>
+  <span class="cx">--couleur-primaire</span><span class="cp">:</span>    <span class="cn">#1a5fa8</span><span class="cp">;</span>  <span class="cm">/* bleu principal */</span>
+  <span class="cx">--couleur-accent</span><span class="cp">:</span>       <span class="cn">#4caf32</span><span class="cp">;</span>  <span class="cm">/* vert d'accentuation */</span>
+  <span class="cx">--couleur-texte</span><span class="cp">:</span>        <span class="cn">#1a2535</span><span class="cp">;</span>  <span class="cm">/* texte principal */</span>
+  <span class="cx">--couleur-texte-2</span><span class="cp">:</span>      <span class="cn">#5a6a7e</span><span class="cp">;</span>  <span class="cm">/* texte secondaire */</span>
+  <span class="cx">--couleur-fond</span><span class="cp">:</span>         <span class="cn">#f4f7fb</span><span class="cp">;</span>  <span class="cm">/* fond de page */</span>
+  <span class="cx">--couleur-blanc</span><span class="cp">:</span>        <span class="cn">#ffffff</span><span class="cp">;</span>
+
+  <span class="cm">/* Espacement */</span>
+  <span class="cx">--rayon-sm</span><span class="cp">:</span>    <span class="cn">6px</span><span class="cp">;</span>
+  <span class="cx">--rayon-md</span><span class="cp">:</span>    <span class="cn">12px</span><span class="cp">;</span>
+  <span class="cx">--rayon-lg</span><span class="cp">:</span>    <span class="cn">20px</span><span class="cp">;</span>
+
+  <span class="cm">/* Ombres */</span>
+  <span class="cx">--ombre-sm</span><span class="cp">:</span>    <span class="cn">0 2px 8px</span> rgba<span class="cp">(</span><span class="cn">0,0,0,.08</span><span class="cp">)</span><span class="cp">;</span>
+  <span class="cx">--ombre-md</span><span class="cp">:</span>    <span class="cn">0 6px 24px</span> rgba<span class="cp">(</span><span class="cn">0,0,0,.12</span><span class="cp">)</span><span class="cp">;</span>
+
+  <span class="cm">/* Transition réutilisable */</span>
+  <span class="cx">--transition</span><span class="cp">:</span> <span class="cn">0.28s</span> cubic-bezier<span class="cp">(</span><span class="cn">0.4</span><span class="cp">,</span><span class="cn">0</span><span class="cp">,</span><span class="cn">0.2</span><span class="cp">,</span><span class="cn">1</span><span class="cp">)</span><span class="cp">;</span>
+
+  <span class="cm">/* Largeur max du contenu */</span>
+  <span class="cx">--max-width</span><span class="cp">:</span>   <span class="cn">1180px</span><span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cm">/* ── Reset moderne - évite les incohérences entre navigateurs ── */</span>
+<span class="cv">*</span><span class="cp">,</span>
+<span class="cv">*::before</span><span class="cp">,</span>
+<span class="cv">*::after</span> <span class="cp">{</span>
+  <span class="cm">/* Inclure padding/border dans la taille totale */</span>
+  <span class="cx">box-sizing</span><span class="cp">:</span>   border-box<span class="cp">;</span>
+  <span class="cx">margin</span><span class="cp">:</span>       <span class="cn">0</span><span class="cp">;</span>  <span class="cm">/* Supprimer marges par défaut */</span>
+  <span class="cx">padding</span><span class="cp">:</span>      <span class="cn">0</span><span class="cp">;</span>  <span class="cm">/* Supprimer paddings par défaut */</span>
+<span class="cp">}</span>
+
+<span class="cv">html</span> <span class="cp">{</span>
+  <span class="cx">scroll-behavior</span><span class="cp">:</span>  smooth<span class="cp">;</span>  <span class="cm">/* Défilement fluide (ancres) */</span>
+  <span class="cx">font-size</span><span class="cp">:</span>        <span class="cn">16px</span><span class="cp">;</span>    <span class="cm">/* Base pour les rem */</span>
+<span class="cp">}</span>
+
+<span class="cv">body</span> <span class="cp">{</span>
+  <span class="cx">font-family</span><span class="cp">:</span>   var<span class="cp">(</span><span class="cx">--font-body</span><span class="cp">)</span><span class="cp">;</span>
+  <span class="cx">color</span><span class="cp">:</span>         var<span class="cp">(</span><span class="cx">--couleur-texte</span><span class="cp">)</span><span class="cp">;</span>
+  <span class="cx">background</span><span class="cp">:</span>    var<span class="cp">(</span><span class="cx">--couleur-fond</span><span class="cp">)</span><span class="cp">;</span>
+  <span class="cx">line-height</span><span class="cp">:</span>   <span class="cn">1.6</span><span class="cp">;</span>         <span class="cm">/* Lisibilité optimale */</span>
+  <span class="cx">overflow-x</span><span class="cp">:</span>    hidden<span class="cp">;</span>      <span class="cm">/* Évite le scroll horizontal */</span>
+<span class="cp">}</span>
+
+<span class="cm">/* Images responsives par défaut */</span>
+<span class="cv">img</span> <span class="cp">{</span>
+  <span class="cx">max-width</span><span class="cp">:</span>    <span class="cn">100%</span><span class="cp">;</span>   <span class="cm">/* Ne jamais déborder du parent */</span>
+  <span class="cx">display</span><span class="cp">:</span>      block<span class="cp">;</span>  <span class="cm">/* Supprime l'espace sous les images */</span>
+<span class="cp">}</span></code></pre>
+  </div>
+</div>
+
+<!-- ═══ Flexbox ═══ -->
+<div class="section" id="css-flex">
+  <div class="section-head">
+    <h2>🔵 CSS3 - Flexbox layouts</h2>
+    <p>Les patterns Flexbox les plus utilisés</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">CSS</span><span class="code-title">Patterns Flexbox essentiels</span></div>
+      <button class="copy-btn">Copier</button>
+    </div>
+    <pre><code><span class="cm">/* ── Pattern 1 : Centrage parfait ── */</span>
+<span class="cv">.centre-absolu</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span>          flex<span class="cp">;</span>
+  <span class="cx">justify-content</span><span class="cp">:</span>  center<span class="cp">;</span>  <span class="cm">/* axe horizontal */</span>
+  <span class="cx">align-items</span><span class="cp">:</span>      center<span class="cp">;</span>  <span class="cm">/* axe vertical */</span>
+<span class="cp">}</span>
+
+<span class="cm">/* ── Pattern 2 : Navbar (logo gauche, liens droite) ── */</span>
+<span class="cv">.navbar</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span>          flex<span class="cp">;</span>
+  <span class="cx">align-items</span><span class="cp">:</span>      center<span class="cp">;</span>       <span class="cm">/* verticalement centrés */</span>
+  <span class="cx">justify-content</span><span class="cp">:</span>  space-between<span class="cp">;</span> <span class="cm">/* logo ← ... → liens */</span>
+  <span class="cx">gap</span><span class="cp">:</span>              <span class="cn">1rem</span><span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cm">/* ── Pattern 3 : Boutons côte à côte avec retour auto ── */</span>
+<span class="cv">.actions</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span>     flex<span class="cp">;</span>
+  <span class="cx">flex-wrap</span><span class="cp">:</span>   wrap<span class="cp">;</span>   <span class="cm">/* retour à la ligne si pas assez de place */</span>
+  <span class="cx">gap</span><span class="cp">:</span>         <span class="cn">1rem</span><span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cm">/* ── Pattern 4 : Sidebar + contenu principal ── */</span>
+<span class="cv">.layout-2-col</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span>  flex<span class="cp">;</span>
+  <span class="cx">gap</span><span class="cp">:</span>      <span class="cn">2rem</span><span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cv">.sidebar</span> <span class="cp">{</span>
+  <span class="cx">width</span><span class="cp">:</span>      <span class="cn">280px</span><span class="cp">;</span>   <span class="cm">/* largeur fixe */</span>
+  <span class="cx">flex-shrink</span><span class="cp">:</span> <span class="cn">0</span><span class="cp">;</span>     <span class="cm">/* ne jamais rétrécir */</span>
+<span class="cp">}</span>
+
+<span class="cv">.contenu-principal</span> <span class="cp">{</span>
+  <span class="cx">flex</span><span class="cp">:</span>  <span class="cn">1</span><span class="cp">;</span>   <span class="cm">/* occupe tout l'espace restant */</span>
+<span class="cp">}</span>
+
+<span class="cm">/* ── Pattern 5 : Pousser un élément à droite ── */</span>
+<span class="cv">.groupe</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span>  flex<span class="cp">;</span>
+  <span class="cx">gap</span><span class="cp">:</span>      <span class="cn">.5rem</span><span class="cp">;</span>
+<span class="cp">}</span>
+<span class="cm">/* margin-left: auto pousse cet élément tout à droite */</span>
+<span class="cv">.groupe .dernier-a-droite</span> <span class="cp">{</span>
+  <span class="cx">margin-left</span><span class="cp">:</span>  auto<span class="cp">;</span>
+<span class="cp">}</span></code></pre>
+  </div>
+</div>
+
+<!-- ═══ Responsive ═══ -->
+<div class="section" id="css-responsive">
+  <div class="section-head">
+    <h2>🔵 CSS3 - Media queries Responsive</h2>
+    <p>Approche mobile-first avec des breakpoints progressifs</p>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card good">
+      <div class="compare-header">✓ Mobile-first (recommandé)</div>
+      <pre><code><span class="cm">/* Base : mobile (default) */</span>
+<span class="cv">.grid</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span> grid<span class="cp">;</span>
+  <span class="cm">/* 1 colonne sur mobile */</span>
+  <span class="cx">grid-template-columns</span><span class="cp">:</span> <span class="cn">1fr</span><span class="cp">;</span>
+  <span class="cx">gap</span><span class="cp">:</span> <span class="cn">1rem</span><span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cm">/* Tablette : ≥ 600px */</span>
+@media (min-width: <span class="cn">600px</span>) <span class="cp">{</span>
+  <span class="cv">.grid</span> <span class="cp">{</span>
+    <span class="cx">grid-template-columns</span><span class="cp">:</span>
+      repeat(<span class="cn">2</span>, <span class="cn">1fr</span>)<span class="cp">;</span>
+  <span class="cp">}</span>
+<span class="cp">}</span>
+
+<span class="cm">/* Desktop : ≥ 900px */</span>
+@media (min-width: <span class="cn">900px</span>) <span class="cp">{</span>
+  <span class="cv">.grid</span> <span class="cp">{</span>
+    <span class="cx">grid-template-columns</span><span class="cp">:</span>
+      repeat(<span class="cn">3</span>, <span class="cn">1fr</span>)<span class="cp">;</span>
+  <span class="cp">}</span>
+<span class="cp">}</span></code></pre>
+    </div>
+    <div class="compare-card bad">
+      <div class="compare-header">✗ Desktop-first (à éviter)</div>
+      <pre><code><span class="cm">/* Base : desktop */</span>
+<span class="cv">.grid</span> <span class="cp">{</span>
+  <span class="cx">display</span><span class="cp">:</span> grid<span class="cp">;</span>
+  <span class="cm">/* 3 colonnes de base */</span>
+  <span class="cx">grid-template-columns</span><span class="cp">:</span>
+    repeat(<span class="cn">3</span>, <span class="cn">1fr</span>)<span class="cp">;</span>
+<span class="cp">}</span>
+
+<span class="cm">/* Tablette */</span>
+@media (max-width: <span class="cn">900px</span>) <span class="cp">{</span>
+  <span class="cv">.grid</span> <span class="cp">{</span>
+    <span class="cx">grid-template-columns</span><span class="cp">:</span>
+      repeat(<span class="cn">2</span>, <span class="cn">1fr</span>)<span class="cp">;</span>
+  <span class="cp">}</span>
+<span class="cp">}</span>
+
+<span class="cm">/* Mobile */</span>
+@media (max-width: <span class="cn">600px</span>) <span class="cp">{</span>
+  <span class="cv">.grid</span> <span class="cp">{</span>
+    <span class="cx">grid-template-columns</span><span class="cp">:</span>
+      <span class="cn">1fr</span><span class="cp">;</span>
+  <span class="cp">}</span>
+<span class="cp">}</span></code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ JS ════════ -->
+<div class="section" id="js-fetch">
+  <div class="section-head">
+    <h2>🟡 JavaScript - fetch() AJAX complet</h2>
+    <p>Chargement asynchrone de données JSON avec gestion d'erreur</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">JS</span><span class="code-title">fetch-formations.js</span></div>
+      <button class="copy-btn">Copier</button>
+    </div>
+    <pre><code><span class="cm">/**
+ * Charge et affiche les formations depuis un fichier JSON.
+ * Utilise fetch() avec async/await - approche moderne ES2017+
+ */</span>
+
+<span class="cm">// ── Sélection des éléments DOM ─────────────────────</span>
+<span class="ck">const</span> <span class="cf">grille</span>  = document.<span class="cf">getElementById</span>(<span class="cs">'formations-grid'</span>);
+<span class="ck">const</span> <span class="cf">loader</span>  = document.<span class="cf">querySelector</span>(<span class="cs">'.loader'</span>);
+
+<span class="cm">// ── Fonction principale asynchrone ──────────────────</span>
+<span class="ck">async function</span> <span class="cf">chargerFormations</span>() <span class="cp">{</span>
+
+  <span class="cm">// 1. Afficher le loader pendant le chargement</span>
+  <span class="cf">afficherLoader</span>(<span class="ck">true</span>);
+
+  <span class="cm">// try/catch : gère les erreurs réseau et JSON</span>
+  <span class="ck">try</span> <span class="cp">{</span>
+
+    <span class="cm">// 2. Envoyer la requête HTTP GET</span>
+    <span class="ck">const</span> <span class="cf">response</span> = <span class="ck">await</span> <span class="cf">fetch</span>(<span class="cs">'./data/formations.json'</span>);
+
+    <span class="cm">// 3. Vérifier que la réponse est un succès (200-299)</span>
+    <span class="ck">if</span> (!response.<span class="cf">ok</span>) <span class="cp">{</span>
+      <span class="cm">// Lance une erreur qui sera attrapée par le catch</span>
+      <span class="ck">throw new</span> <span class="cf">Error</span>(<span class="cs">`Erreur HTTP : ${response.status}`</span>);
+    <span class="cp">}</span>
+
+    <span class="cm">// 4. Parser la réponse en JSON (aussi async !)
+    //    data = { formations: [...] }</span>
+    <span class="ck">const</span> <span class="cf">data</span> = <span class="ck">await</span> response.<span class="cf">json</span>();
+
+    <span class="cm">// 5. Extraire le tableau (avec valeur par défaut [])</span>
+    <span class="ck">const</span> <span class="cf">formations</span> = data.formations ?? [];
+
+    <span class="cm">// 6. Afficher les formations dans le DOM</span>
+    <span class="cf">afficherFormations</span>(formations);
+
+  <span class="cp">}</span> <span class="ck">catch</span> (erreur) <span class="cp">{</span>
+
+    <span class="cm">// 7. Afficher un message d'erreur utilisateur</span>
+    console.<span class="cf">error</span>(<span class="cs">'Erreur de chargement :'</span>, erreur);
+    <span class="cf">afficherErreur</span>(<span class="cs">'Impossible de charger les formations.'</span>);
+
+  <span class="cp">}</span> <span class="ck">finally</span> <span class="cp">{</span>
+
+    <span class="cm">// 8. finally : toujours exécuté (succès ou erreur)</span>
+    <span class="cf">afficherLoader</span>(<span class="ck">false</span>);
+
+  <span class="cp">}</span>
+<span class="cp">}</span>
+
+<span class="cm">// ── Fonctions utilitaires ────────────────────────────</span>
+
+<span class="cm">/**
+ * Génère et insère les cartes de formation.
+ * @param {Array} formations - Tableau d'objets formation
+ */</span>
+<span class="ck">function</span> <span class="cf">afficherFormations</span>(formations) <span class="cp">{</span>
+  <span class="cm">// Vider la grille avant d'insérer les nouvelles cartes</span>
+  grille.innerHTML = <span class="cs">''</span>;
+
+  <span class="ck">if</span> (formations.length === <span class="cn">0</span>) <span class="cp">{</span>
+    grille.innerHTML = <span class="cs">'&lt;p&gt;Aucune formation disponible.&lt;/p&gt;'</span>;
+    <span class="ck">return</span>;
+  <span class="cp">}</span>
+
+  <span class="cm">// forEach : parcourt chaque formation</span>
+  formations.<span class="cf">forEach</span>((formation, index) => <span class="cp">{</span>
+    <span class="ck">const</span> <span class="cf">carte</span> = <span class="cf">creerCarte</span>(formation, index);
+    grille.<span class="cf">appendChild</span>(carte);   <span class="cm">// Ajoute au DOM</span>
+  <span class="cp">}</span>);
+<span class="cp">}</span>
+
+<span class="cm">/**
+ * Crée un élément article pour une formation.
+ * Utilise createElement (plus sûr que innerHTML pour les données externes)
+ */</span>
+<span class="ck">function</span> <span class="cf">creerCarte</span>(formation, index) <span class="cp">{</span>
+  <span class="ck">const</span> <span class="cf">article</span> = document.<span class="cf">createElement</span>(<span class="cs">'article'</span>);
+  article.className = <span class="cs">'formation-card'</span>;
+
+  <span class="cm">// animation-delay : chaque carte apparaît avec un léger décalage</span>
+  article.style.animationDelay = <span class="cs">`${index * 60}ms`</span>;
+
+  <span class="cm">// textContent est sûr (pas d'injection XSS possible)</span>
+  article.innerHTML = <span class="cs">`
+    &lt;div class="card-header"&gt;
+      &lt;span class="card-level"&gt;${<span class="cf">echapper</span>(formation.level)}&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;h3 class="card-title"&gt;${<span class="cf">echapper</span>(formation.title)}&lt;/h3&gt;
+    &lt;p class="card-category"&gt;${<span class="cf">echapper</span>(formation.category)}&lt;/p&gt;
+    &lt;p class="card-duration"&gt;Durée : ${<span class="cf">echapper</span>(formation.duration)}&lt;/p&gt;
+  `</span>;
+
+  <span class="ck">return</span> article;
+<span class="cp">}</span>
+
+<span class="cm">/**
+ * Échappe les caractères HTML - prévention XSS.
+ * Toujours échapper les données avant insertion dans le DOM.
+ */</span>
+<span class="ck">function</span> <span class="cf">echapper</span>(chaine) <span class="cp">{</span>
+  <span class="ck">const</span> <span class="cf">div</span> = document.<span class="cf">createElement</span>(<span class="cs">'div'</span>);
+  div.textContent = <span class="cf">String</span>(chaine);
+  <span class="ck">return</span> div.innerHTML;
+<span class="cp">}</span>
+
+<span class="cm">// ── Lancement au chargement du DOM ──────────────────</span>
+<span class="cm">// DOMContentLoaded : le DOM est prêt, pas besoin d'attendre les images</span>
+document.<span class="cf">addEventListener</span>(<span class="cs">'DOMContentLoaded'</span>, chargerFormations);</code></pre>
+  </div>
+</div>
+
+<!-- ═══ Validation formulaire JS ═══ -->
+<div class="section" id="js-form">
+  <div class="section-head">
+    <h2>🟡 JavaScript - Validation de formulaire</h2>
+    <p>Validation complète avec messages d'erreur accessibles</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">JS</span><span class="code-title">form-validation.js</span></div>
+      <button class="copy-btn">Copier</button>
+    </div>
+    <pre><code><span class="cm">/**
+ * Validation de formulaire en JavaScript pur.
+ * Principes : accessibilité, messages clairs, aria-invalid.
+ */</span>
+
+<span class="ck">const</span> <span class="cf">form</span>     = document.<span class="cf">querySelector</span>(<span class="cs">'#form-contact'</span>);
+<span class="ck">const</span> <span class="cf">champNom</span>  = document.<span class="cf">getElementById</span>(<span class="cs">'nom'</span>);
+<span class="ck">const</span> <span class="cf">champEmail</span>= document.<span class="cf">getElementById</span>(<span class="cs">'email'</span>);
+
+<span class="cm">// ── Règles de validation ─────────────────────────────</span>
+<span class="ck">const</span> <span class="cf">regles</span> = <span class="cp">{</span>
+  nom: <span class="cp">{</span>
+    <span class="cm">// Valider retourne null si OK, ou un message d'erreur</span>
+    <span class="cf">valider</span>: (val) => <span class="cp">{</span>
+      <span class="ck">if</span> (!val.trim()) <span class="ck">return</span> <span class="cs">'Le nom est obligatoire.'</span>;
+      <span class="ck">if</span> (val.length < <span class="cn">2</span>)  <span class="ck">return</span> <span class="cs">'Le nom doit contenir au moins 2 caractères.'</span>;
+      <span class="ck">return</span> <span class="ck">null</span>;  <span class="cm">// null = pas d'erreur</span>
+    <span class="cp">}</span>
+  <span class="cp">}</span>,
+  email: <span class="cp">{</span>
+    <span class="cf">valider</span>: (val) => <span class="cp">{</span>
+      <span class="ck">if</span> (!val.trim()) <span class="ck">return</span> <span class="cs">'L\'email est obligatoire.'</span>;
+      <span class="cm">// Regex simple pour valider le format email</span>
+      <span class="ck">if</span> (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val))
+        <span class="ck">return</span> <span class="cs">'L\'adresse email n\'est pas valide.'</span>;
+      <span class="ck">return</span> <span class="ck">null</span>;
+    <span class="cp">}</span>
+  <span class="cp">}</span>
+<span class="cp">}</span>;
+
+<span class="cm">// ── Afficher / effacer une erreur ────────────────────</span>
+<span class="ck">function</span> <span class="cf">afficherErreurChamp</span>(input, messageErreur) <span class="cp">{</span>
+  <span class="cm">// Trouver le span d'erreur associé (via aria-describedby)</span>
+  <span class="ck">const</span> <span class="cf">spanErreur</span> = document.<span class="cf">getElementById</span>(
+    input.<span class="cf">getAttribute</span>(<span class="cs">'aria-describedby'</span>)
+  );
+
+  <span class="ck">if</span> (messageErreur) <span class="cp">{</span>
+    <span class="cm">// ERREUR : signaler visuellement ET aux technologies d'assistance</span>
+    input.<span class="cf">setAttribute</span>(<span class="cs">'aria-invalid'</span>, <span class="cs">'true'</span>);   <span class="cm">// lecteur d'écran</span>
+    input.classList.<span class="cf">add</span>(<span class="cs">'input-error'</span>);           <span class="cm">// style CSS rouge</span>
+    <span class="ck">if</span> (spanErreur) spanErreur.textContent = messageErreur;
+  <span class="cp">}</span> <span class="ck">else</span> <span class="cp">{</span>
+    <span class="cm">// SUCCÈS : réinitialiser tout</span>
+    input.<span class="cf">setAttribute</span>(<span class="cs">'aria-invalid'</span>, <span class="cs">'false'</span>);
+    input.classList.<span class="cf">remove</span>(<span class="cs">'input-error'</span>);
+    input.classList.<span class="cf">add</span>(<span class="cs">'input-success'</span>);
+    <span class="ck">if</span> (spanErreur) spanErreur.textContent = <span class="cs">''</span>;
+  <span class="cp">}</span>
+<span class="cp">}</span>
+
+<span class="cm">// ── Validation en temps réel (blur = quand on quitte le champ) ──</span>
+[champNom, champEmail].<span class="cf">forEach</span>(input => <span class="cp">{</span>
+  input.<span class="cf">addEventListener</span>(<span class="cs">'blur'</span>, () => <span class="cp">{</span>
+    <span class="ck">const</span> <span class="cf">regle</span> = regles[input.name];
+    <span class="ck">if</span> (!regle) <span class="ck">return</span>;
+    <span class="ck">const</span> <span class="cf">erreur</span> = regle.<span class="cf">valider</span>(input.value);
+    <span class="cf">afficherErreurChamp</span>(input, erreur);
+  <span class="cp">}</span>);
+<span class="cp">}</span>);
+
+<span class="cm">// ── Soumission du formulaire ─────────────────────────</span>
+form?.<span class="cf">addEventListener</span>(<span class="cs">'submit'</span>, (event) => <span class="cp">{</span>
+
+  <span class="cm">// Empêche le rechargement de page (comportement natif)</span>
+  event.<span class="cf">preventDefault</span>();
+
+  <span class="cm">// Valider tous les champs</span>
+  <span class="ck">const</span> <span class="cf">erreurs</span> = <span class="cp">{</span>
+    nom:   regles.nom.<span class="cf">valider</span>(champNom.value),
+    email: regles.email.<span class="cf">valider</span>(champEmail.value),
+  <span class="cp">}</span>;
+
+  <span class="cm">// Afficher les erreurs</span>
+  <span class="cf">afficherErreurChamp</span>(champNom,   erreurs.nom);
+  <span class="cf">afficherErreurChamp</span>(champEmail, erreurs.email);
+
+  <span class="cm">// S'il n'y a aucune erreur : soumettre</span>
+  <span class="ck">const</span> <span class="cf">formulaireValide</span> = !erreurs.nom && !erreurs.email;
+
+  <span class="ck">if</span> (formulaireValide) <span class="cp">{</span>
+    <span class="cf">envoyerFormulaire</span>(form);
+  <span class="cp">}</span> <span class="ck">else</span> <span class="cp">{</span>
+    <span class="cm">// Focus sur le premier champ en erreur</span>
+    document.<span class="cf">querySelector</span>(<span class="cs">'.input-error'</span>)?.<span class="cf">focus</span>();
+  <span class="cp">}</span>
+<span class="cp">}</span>);</code></pre>
+  </div>
+</div>
+
+<!-- ═══ Menu burger ═══ -->
+<div class="section" id="js-burger">
+  <div class="section-head">
+    <h2>🟡 JavaScript - Menu burger accessible</h2>
+    <p>Implémentation complète avec accessibilité clavier</p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-header-left"><div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div><span class="code-lang">JS</span><span class="code-title">menu-burger.js</span></div>
+      <button class="copy-btn">Copier</button>
+    </div>
+    <pre><code><span class="cm">/**
+ * Menu burger mobile - Version accessible complète.
+ * Gère : clic bouton, clic extérieur, touche Escape, scroll body.
+ */</span>
+
+<span class="ck">const</span> <span class="cf">burger</span>      = document.<span class="cf">getElementById</span>(<span class="cs">'burger-btn'</span>);
+<span class="ck">const</span> <span class="cf">menuMobile</span>  = document.<span class="cf">getElementById</span>(<span class="cs">'mobile-menu'</span>);
+
+<span class="cm">// ── Ouvrir / fermer (toggle) ─────────────────────────</span>
+<span class="ck">function</span> <span class="cf">toggleMenu</span>() <span class="cp">{</span>
+  <span class="ck">const</span> <span class="cf">estOuvert</span> = menuMobile.classList.<span class="cf">toggle</span>(<span class="cs">'open'</span>);
+
+  <span class="cm">// Synchroniser l'attribut ARIA pour les lecteurs d'écran</span>
+  burger.<span class="cf">setAttribute</span>(<span class="cs">'aria-expanded'</span>, <span class="cf">String</span>(estOuvert));
+
+  <span class="cm">// Bloquer le scroll du body quand le menu est ouvert</span>
+  document.body.style.overflow = estOuvert ? <span class="cs">'hidden'</span> : <span class="cs">''</span>;
+<span class="cp">}</span>
+
+<span class="cm">// ── Fermer uniquement ────────────────────────────────</span>
+<span class="ck">function</span> <span class="cf">fermerMenu</span>() <span class="cp">{</span>
+  menuMobile.classList.<span class="cf">remove</span>(<span class="cs">'open'</span>);
+  burger.<span class="cf">setAttribute</span>(<span class="cs">'aria-expanded'</span>, <span class="cs">'false'</span>);
+  document.body.style.overflow = <span class="cs">''</span>;
+<span class="cp">}</span>
+
+<span class="cm">// ── Événements ──────────────────────────────────────</span>
+
+<span class="cm">// 1. Clic sur le bouton burger</span>
+burger?.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, toggleMenu);
+
+<span class="cm">// 2. Clic sur un lien du menu → fermer</span>
+menuMobile?.<span class="cf">querySelectorAll</span>(<span class="cs">'a'</span>).<span class="cf">forEach</span>(lien => <span class="cp">{</span>
+  lien.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, fermerMenu);
+<span class="cp">}</span>);
+
+<span class="cm">// 3. Clic en dehors du menu → fermer
+//    Vérifie que le clic n'est ni dans le menu ni sur le burger</span>
+document.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, (e) => <span class="cp">{</span>
+  <span class="ck">if</span> (
+    menuMobile?.classList.<span class="cf">contains</span>(<span class="cs">'open'</span>) &&
+    !menuMobile.<span class="cf">contains</span>(e.target) &&       <span class="cm">// pas dans le menu</span>
+    !burger.<span class="cf">contains</span>(e.target)              <span class="cm">// pas sur le burger</span>
+  ) <span class="cp">{</span>
+    <span class="cf">fermerMenu</span>();
+  <span class="cp">}</span>
+<span class="cp">}</span>);
+
+<span class="cm">// 4. Touche Escape → fermer + remettre le focus sur le burger</span>
+document.<span class="cf">addEventListener</span>(<span class="cs">'keydown'</span>, (e) => <span class="cp">{</span>
+  <span class="ck">if</span> (e.key === <span class="cs">'Escape'</span> && menuMobile?.classList.<span class="cf">contains</span>(<span class="cs">'open'</span>)) <span class="cp">{</span>
+    <span class="cf">fermerMenu</span>();
+    burger?.<span class="cf">focus</span>();  <span class="cm">// Ramène le focus au bouton burger</span>
+  <span class="cp">}</span>
+<span class="cp">}</span>);</code></pre>
+  </div>
+
+  <div class="explain">Ce pattern est <strong>complet et accessible</strong> : l'attribut <code>aria-expanded</code> est synchronisé à chaque état, le focus est géré au clavier, et le scroll du body est bloqué pour éviter que l'utilisateur scroll en arrière-plan pendant que le menu est ouvert.</div>
+</div>
+
+</div><!-- /.main-inner -->
+</div><!-- /.main -->
+</div><!-- /.layout -->
+
+<script>
+// Highlight sidebar
+const allSections = document.querySelectorAll('.section[id]');
+const sidebarLinks = document.querySelectorAll('.sidebar a');
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      sidebarLinks.forEach(a => a.classList.remove('on'));
+      const a = document.querySelector(`.sidebar a[href="#${e.target.id}"]`);
+      if (a) a.classList.add('on');
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-80px 0px -60% 0px' }).observe ?? allSections.forEach(s => {
+  // fallback simple
+});
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pre = btn.closest('.code-block')?.querySelector('pre') ||
+                btn.closest('.annotated')?.querySelector('pre');
+    if (!pre) return;
+    const text = pre.innerText;
+    navigator.clipboard?.writeText(text).then(() => {
+      btn.textContent = '✓ Copié';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+});
+</script>
+</body>
+</html>

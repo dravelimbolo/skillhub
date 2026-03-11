@@ -1,4 +1,4 @@
-# SkillHub — Landing Page
+# SkillHub - Landing Page
 
 Landing page publique de la plateforme interne SkillHub (Asteria Group).
 

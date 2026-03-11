@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cours Schémas - HTML · CSS · JS · Responsive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#fafaf8;--bg2:#ffffff;--bg3:#f3f4f6;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --text:#111827;--text2:#374151;--text3:#6b7280;
+  --blue:#2563eb;--blue-l:#eff6ff;--blue-b:#bfdbfe;
+  --green:#16a34a;--green-l:#f0fdf4;--green-b:#bbf7d0;
+  --orange:#ea580c;--orange-l:#fff7ed;--orange-b:#fed7aa;
+  --purple:#7c3aed;--purple-l:#f5f3ff;--purple-b:#ddd6fe;
+  --red:#dc2626;--red-l:#fef2f2;--red-b:#fecaca;
+  --yellow:#ca8a04;--yellow-l:#fefce8;--yellow-b:#fef08a;
+  --mono:'IBM Plex Mono',monospace;--font:'Nunito',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6}
+
+/* Layout */
+.page{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem}
+
+/* Hero */
+.hero{text-align:center;padding:3rem 2rem;background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:20px;margin-bottom:3rem;color:white}
+.hero h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;margin-bottom:.6rem}
+.hero p{color:rgba(255,255,255,.75);font-size:1rem;max-width:500px;margin:0 auto}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:1.25rem}
+.htag{font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:50px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85)}
+
+/* Sections */
+.chapter{margin-bottom:4rem}
+.chapter-head{margin-bottom:2rem}
+.chapter-head h2{font-size:1.4rem;font-weight:900;display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem}
+.chapter-head p{color:var(--text3);font-size:.9rem}
+
+/* Schema container */
+.schema{background:#1a1a2e;border-radius:14px;overflow:hidden;margin:1.5rem 0;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+.schema-header{background:#16213e;padding:.65rem 1.1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+.schema-title{font-family:var(--mono);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.05em}
+.schema-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;padding:.2rem .6rem;border-radius:50px;letter-spacing:.08em}
+.tag-html{background:rgba(234,88,12,.2);color:#fb923c}
+.tag-css{background:rgba(37,99,235,.2);color:#60a5fa}
+.tag-js{background:rgba(202,138,4,.2);color:#fbbf24}
+.tag-resp{background:rgba(124,58,237,.2);color:#a78bfa}
+.tag-access{background:rgba(22,163,74,.2);color:#4ade80}
+pre.ascii{
+  font-family:var(--mono);
+  font-size:.8rem;
+  line-height:1.65;
+  padding:1.5rem 1.75rem;
+  color:#e2e8f0;
+  overflow-x:auto;
+  white-space:pre;
+  background:transparent;
+}
+/* Coloration ASCII */
+pre.ascii .h{color:#fb923c;font-weight:600}    /* html */
+pre.ascii .c{color:#60a5fa;font-weight:600}    /* css */
+pre.ascii .j{color:#fbbf24;font-weight:600}    /* js */
+pre.ascii .g{color:#4ade80}                    /* green / ok */
+pre.ascii .r{color:#f87171}                    /* red / bad */
+pre.ascii .p{color:#a78bfa}                    /* purple */
+pre.ascii .y{color:#fbbf24}                    /* yellow */
+pre.ascii .w{color:#f1f5f9}                    /* white */
+pre.ascii .d{color:#64748b}                    /* dim */
+pre.ascii .a{color:#67e8f9}                    /* accent / cyan */
+
+/* Légende */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;padding:.9rem 1.1rem;border-top:1px solid rgba(255,255,255,.06);background:#16213e}
+.leg-item{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.7rem;color:rgba(255,255,255,.5)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
+/* Cards explicatives */
+.expl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin:1.25rem 0}
+.expl-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:.2s}
+.expl-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.expl-icon{font-size:1.5rem;margin-bottom:.5rem}
+.expl-title{font-weight:800;font-size:.9rem;color:var(--text);margin-bottom:.3rem}
+.expl-desc{font-size:.8rem;color:var(--text3);line-height:1.5}
+.expl-code{font-family:var(--mono);font-size:.72rem;background:var(--bg3);padding:.2rem .5rem;border-radius:4px;color:var(--orange);margin-top:.4rem;display:inline-block}
+
+/* Comparaison Bon/Mauvais */
+.good-bad{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.gb-card{border-radius:12px;overflow:hidden;border:1.5px solid}
+.gb-good{border-color:var(--green-b)}
+.gb-bad{border-color:var(--red-b)}
+.gb-head{padding:.5rem 1rem;font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.gb-good .gb-head{background:var(--green-l);color:var(--green)}
+.gb-bad  .gb-head{background:var(--red-l);color:var(--red)}
+.gb-card pre.ascii{padding:1rem 1.1rem;font-size:.72rem;background:#1a1a2e;color:#e2e8f0}
+
+/* Règle d'or */
+.rule-box{background:linear-gradient(135deg,var(--purple-l),var(--blue-l));border:2px solid var(--purple-b);border-radius:14px;padding:1.25rem 1.5rem;margin:1.25rem 0}
+.rule-box h4{font-size:.85rem;font-weight:800;color:var(--purple);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+.rule-box p{font-size:.88rem;color:var(--text2)}
+.rule-box code{font-family:var(--mono);background:rgba(124,58,237,.1);color:var(--purple);padding:.1em .35em;border-radius:3px;font-size:.85em}
+
+/* Sommaire */
+.toc{background:var(--bg2);border:1.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem}
+.toc-title{font-weight:800;font-size:.95rem;margin-bottom:.75rem;grid-column:1/-1;color:var(--text)}
+.toc a{font-size:.85rem;color:var(--blue);text-decoration:none;padding:.25rem 0;display:flex;align-items:center;gap:.4rem;font-weight:600}
+.toc a:hover{text-decoration:underline}
+
+@media(max-width:640px){
+  .good-bad{grid-template-columns:1fr}
+  pre.ascii{font-size:.68rem;padding:1rem}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <h1>📐 Cours par Schémas ASCII</h1>
+  <p>Visualiser pour comprendre - HTML, CSS, JavaScript, Responsive, Accessibilité</p>
+  <div class="hero-tags">
+    <span class="htag">🟠 HTML5</span>
+    <span class="htag">🔵 CSS3 · Flexbox · Grid</span>
+    <span class="htag">🟡 JavaScript</span>
+    <span class="htag">🟣 Responsive</span>
+    <span class="htag">🟢 Accessibilité</span>
+  </div>
+</div>
+
+<!-- SOMMAIRE -->
+<div class="toc">
+  <div class="toc-title">📚 Table des matières</div>
+  <a href="#dom">🌳 Arbre DOM HTML5</a>
+  <a href="#flux-html">📄 Flux de rendu HTML</a>
+  <a href="#cascade-css">⚡ Cascade CSS</a>
+  <a href="#box-model">📦 Box Model</a>
+  <a href="#flexbox">🔄 Flexbox</a>
+  <a href="#grid">⊞ CSS Grid</a>
+  <a href="#responsive">📱 Responsive</a>
+  <a href="#fetch">🌐 fetch() AJAX</a>
+  <a href="#dom-events">⚡ Événements DOM</a>
+  <a href="#accessibilite">♿ Accessibilité</a>
+  <a href="#form-valid">✔ Validation form</a>
+  <a href="#organisation">📁 Organisation projet</a>
+</div>
+
+<!-- ════════════════════════════════
+     1. ARBRE DOM
+════════════════════════════════ -->
+<div class="chapter" id="dom">
+  <div class="chapter-head">
+    <h2>🟠 L'arbre DOM HTML5</h2>
+    <p>Le DOM (Document Object Model) représente la page HTML comme un arbre d'objets manipulables par JavaScript</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Structure DOM complète d'une page</span><span class="schema-tag tag-html">HTML</span></div>
+    <pre class="ascii"><span class="d">                    ARBRE DOM HTML5</span>
+<span class="d">                 ┌──────────────────────┐</span>
+<span class="d">                 │</span>   <span class="h">document</span>            <span class="d">│</span>
+<span class="d">                 └──────────┬───────────┘</span>
+                            │
+               <span class="d">┌───────────┴────────────┐</span>
+               │         <span class="h">&lt;html&gt;</span>          │
+               │       <span class="a">lang="fr"</span>         │
+               <span class="d">└───┬────────────────┬───┘</span>
+                   │                │
+       <span class="d">┌──────────┴───┐      ┌────┴──────────────┐</span>
+       │   <span class="h">&lt;head&gt;</span>      │      │     <span class="h">&lt;body&gt;</span>         │
+       <span class="d">└──────┬───────┘</span>      <span class="d">└────┬───────────────┘</span>
+              │                   │
+   <span class="d">┌──────────┼──────┐  ┌─────────┼──────────────────┐</span>
+   │          │      │  │         │                  │
+<span class="h">&lt;meta&gt;</span>   <span class="h">&lt;title&gt;</span> <span class="h">&lt;link&gt;</span>  │      │              │
+<span class="a">charset</span>  <span class="g">"Mon site"</span> <span class="a">rel=</span>  │      │              │
+<span class="a">viewport</span>          <span class="a">css</span>  │      │              │
+                        │      │              │
+                   <span class="h">&lt;header&gt;</span>  <span class="h">&lt;main&gt;</span>      <span class="h">&lt;footer&gt;</span>
+                   <span class="d">│</span>          <span class="d">│</span>             <span class="d">│</span>
+                 <span class="h">&lt;nav&gt;</span>    <span class="h">&lt;section&gt;</span>    <span class="h">&lt;p&gt;</span>© 2025
+                   <span class="d">│</span>       <span class="d">│</span>     <span class="d">│</span>
+                <span class="h">&lt;ul&gt;</span>    <span class="h">&lt;h2&gt;</span> <span class="h">&lt;article&gt;</span>
+                <span class="d">│</span>               <span class="d">│</span>     <span class="d">│</span>
+              <span class="h">&lt;li&gt;</span>×3         <span class="h">&lt;h3&gt;</span>   <span class="h">&lt;p&gt;</span>
+
+<span class="d">  NŒUDS PARENTS ───► NŒUDS ENFANTS ───► TEXTE (feuilles)</span>
+<span class="d">  ┌──────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span> <span class="j">document.getElementById('id')</span>    → <span class="g">1 nœud</span>          <span class="d">│</span>
+<span class="d">  │</span> <span class="j">document.querySelector('.class')</span>  → <span class="g">1er nœud</span>        <span class="d">│</span>
+<span class="d">  │</span> <span class="j">document.querySelectorAll('p')</span>    → <span class="g">NodeList</span>        <span class="d">│</span>
+<span class="d">  └──────────────────────────────────────────────────────┘</span></pre>
+  </div>
+
+  <div class="expl-grid">
+    <div class="expl-card"><div class="expl-icon">🌳</div><div class="expl-title">Nœud parent</div><div class="expl-desc">Contient d'autres nœuds. On y accède avec <code>parentElement</code></div></div>
+    <div class="expl-card"><div class="expl-icon">🌿</div><div class="expl-title">Nœud enfant</div><div class="expl-desc">Contenu dans un parent. <code>children</code>, <code>firstElementChild</code></div></div>
+    <div class="expl-card"><div class="expl-icon">🍃</div><div class="expl-title">Nœud feuille</div><div class="expl-desc">Sans enfants. Souvent du texte. <code>textContent</code></div></div>
+    <div class="expl-card"><div class="expl-icon">🔗</div><div class="expl-title">Nœud frère</div><div class="expl-desc">Même parent. <code>nextElementSibling</code></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     2. BOX MODEL
+════════════════════════════════ -->
+<div class="chapter" id="box-model">
+  <div class="chapter-head">
+    <h2>🔵 Le Box Model CSS</h2>
+    <p>Chaque élément HTML est une boîte composée de 4 couches concentriques</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">CSS Box Model - box-sizing: border-box</span><span class="schema-tag tag-css">CSS</span></div>
+    <pre class="ascii"><span class="d">  ╔══════════════════════════════════════════════════════╗</span>
+  <span class="d">║</span>                                                      <span class="d">║</span>
+  <span class="d">║</span>   <span class="p">MARGIN</span>  <span class="d">(espace extérieur - transparent)</span>          <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">┌────────────────────────────────────────────────┐</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>                                                <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="c">BORDER</span>  <span class="d">(bordure visible)</span>                   <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">┌──────────────────────────────────────────┐</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>                                          <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="j">PADDING</span>  <span class="d">(espace intérieur)</span>             <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">┌────────────────────────────────────┐</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">│</span>                                    <span class="d">│</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">│</span>         <span class="g">CONTENU</span>                   <span class="d">│</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">│</span>         <span class="d">(width × height)</span>           <span class="d">│</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">│</span>                                    <span class="d">│</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">│</span>  <span class="d">└────────────────────────────────────┘</span>  <span class="d">│</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">│</span>   <span class="d">└──────────────────────────────────────────┘</span> <span class="d">│</span>  <span class="d">║</span>
+  <span class="d">║</span>   <span class="d">└────────────────────────────────────────────────┘</span>  <span class="d">║</span>
+  <span class="d">╚══════════════════════════════════════════════════════╝</span>
+
+<span class="d">  Calcul de la taille totale (content-box par défaut) :</span>
+<span class="d">  ┌─────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span> <span class="r">✗ content-box</span>  total = width + padding + border    <span class="d">│</span>
+<span class="d">  │</span> <span class="g">✓ border-box</span>   total = width (padding+border inclus)<span class="d">│</span>
+<span class="d">  └─────────────────────────────────────────────────────┘</span>
+  <span class="c">* { box-sizing: border-box; }</span>  <span class="d">← Toujours mettre ça !</span></pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     3. FLEXBOX
+════════════════════════════════ -->
+<div class="chapter" id="flexbox">
+  <div class="chapter-head">
+    <h2>🔵 Flexbox - Mise en page 1D</h2>
+    <p>Flexbox aligne des éléments sur un seul axe (ligne ou colonne)</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Flexbox - Axes et propriétés</span><span class="schema-tag tag-css">CSS</span></div>
+    <pre class="ascii"><span class="d">  CONTENEUR FLEX  (display: flex)</span>
+<span class="d">  ┌─────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span>                                                     <span class="d">│</span>
+<span class="d">  │</span>  <span class="c">Axe principal ──────────────────────────────────►</span> <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">(flex-direction: row   ← par défaut)</span>              <span class="d">│</span>
+<span class="d">  │</span>                                                     <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">┌──────────┐  ┌──────────┐  ┌──────────┐</span>         <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">│</span> <span class="h">Élément 1</span> <span class="d">│  │</span> <span class="h">Élément 2</span> <span class="d">│  │</span> <span class="h">Élément 3</span> <span class="d">│</span>  <span class="p">▲</span>     <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">└──────────┘  └──────────┘  └──────────┘</span>  <span class="p">│</span>     <span class="d">│</span>
+<span class="d">  │</span>                                               <span class="p">│</span>     <span class="d">│</span>
+<span class="d">  │</span>                                <span class="p">Axe croisé ───┘</span>     <span class="d">│</span>
+<span class="d">  │</span>                                <span class="d">(align-items)</span>        <span class="d">│</span>
+<span class="d">  └─────────────────────────────────────────────────────┘</span>
+
+<span class="d">  ┌────────────────────┬────────────────────────────────┐</span>
+<span class="d">  │</span>  <span class="c">justify-content</span>   <span class="d">│</span>  <span class="p">align-items</span>                 <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">(axe principal)</span>   <span class="d">│</span>  <span class="d">(axe croisé)</span>                <span class="d">│</span>
+<span class="d">  ├────────────────────┼────────────────────────────────┤</span>
+<span class="d">  │</span> <span class="g">flex-start</span>  [■■■···]│ <span class="g">stretch</span>  [■ pleine hauteur]  <span class="d">│</span>
+<span class="d">  │</span> <span class="g">center</span>     [·■■■·] │ <span class="g">center</span>   [centrés vert.]     <span class="d">│</span>
+<span class="d">  │</span> <span class="g">flex-end</span>   [···■■■]│ <span class="g">flex-start</span> [alignés en haut] <span class="d">│</span>
+<span class="d">  │</span> <span class="g">space-between</span> [■·■·■]│ <span class="g">baseline</span> [ligne de base]   <span class="d">│</span>
+<span class="d">  │</span> <span class="g">space-around</span> [·■·■·■·]│                            <span class="d">│</span>
+<span class="d">  └────────────────────┴────────────────────────────────┘</span>
+
+<span class="d">  PATTERNS COURANTS :</span>
+<span class="d">  ┌────────────────────────────────────────────────────┐</span>
+  <span class="d">│</span> <span class="c">Centrage parfait :</span>                                 <span class="d">│</span>
+  <span class="d">│</span>  justify-content: center + align-items: center     <span class="d">│</span>
+  <span class="d">│</span>                                                     <span class="d">│</span>
+  <span class="d">│</span> <span class="c">Navbar (logo ← → liens) :</span>                          <span class="d">│</span>
+  <span class="d">│</span>  justify-content: space-between + align-items:center<span class="d">│</span>
+  <span class="d">│</span>                                                     <span class="d">│</span>
+  <span class="d">│</span> <span class="c">Cartes sur une ligne avec retour :</span>                  <span class="d">│</span>
+  <span class="d">│</span>  flex-wrap: wrap + gap: 1rem                        <span class="d">│</span>
+<span class="d">  └────────────────────────────────────────────────────┘</span></pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     4. CSS GRID
+════════════════════════════════ -->
+<div class="chapter" id="grid">
+  <div class="chapter-head">
+    <h2>🔵 CSS Grid - Mise en page 2D</h2>
+    <p>CSS Grid gère simultanément les lignes ET les colonnes</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">CSS Grid - Layout de page et grille de cartes</span><span class="schema-tag tag-css">CSS</span></div>
+    <pre class="ascii"><span class="d">  grid-template-columns: 260px 1fr   (sidebar + contenu)</span>
+<span class="d">  ┌──────────────┬────────────────────────────────────┐</span>
+<span class="d">  │</span>              <span class="d">│</span>                                    <span class="d">│</span>
+<span class="d">  │</span>   <span class="c">sidebar</span>   <span class="d">│</span>        <span class="j">contenu principal</span>          <span class="d">│</span>
+<span class="d">  │</span>  <span class="d">(260px)</span>    <span class="d">│</span>             <span class="d">(1fr)</span>                <span class="d">│</span>
+<span class="d">  │</span>              <span class="d">│</span>                                    <span class="d">│</span>
+<span class="d">  └──────────────┴────────────────────────────────────┘</span>
+
+<span class="d">  grid-template-columns: repeat(3, 1fr)   (3 colonnes égales)</span>
+<span class="d">  ┌───────────────┬───────────────┬───────────────────┐</span>
+<span class="d">  │</span>   <span class="h">carte 1</span>    <span class="d">│</span>   <span class="h">carte 2</span>    <span class="d">│</span>     <span class="h">carte 3</span>       <span class="d">│</span>
+<span class="d">  │</span>    <span class="d">(1fr)</span>     <span class="d">│</span>    <span class="d">(1fr)</span>     <span class="d">│</span>      <span class="d">(1fr)</span>        <span class="d">│</span>
+<span class="d">  └───────────────┴───────────────┴───────────────────┘</span>
+
+<span class="d">  grid-column: 1 / -1   (s'étend sur toute la largeur)</span>
+<span class="d">  ┌────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span>              <span class="p">élément full-width</span>                   <span class="d">│</span>
+<span class="d">  │</span>          <span class="d">grid-column: 1 / -1</span>                      <span class="d">│</span>
+<span class="d">  └────────────────────────────────────────────────────┘</span>
+<span class="d">  ┌───────────────┬───────────────┬───────────────────┐</span>
+<span class="d">  │</span>   <span class="h">carte A</span>    <span class="d">│</span>   <span class="h">carte B</span>    <span class="d">│</span>     <span class="h">carte C</span>       <span class="d">│</span>
+<span class="d">  └───────────────┴───────────────┴───────────────────┘</span>
+
+<span class="d">  ⭐ GRILLE RESPONSIVE SANS MEDIA QUERY :</span>
+  <span class="c">grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))</span>
+
+<span class="d">  ┌── 1200px : 4 colonnes ────────────────────────────┐</span>
+<span class="d">  │</span> <span class="h">■</span>  280px <span class="d">│</span> <span class="h">■</span>  280px <span class="d">│</span> <span class="h">■</span>  280px <span class="d">│</span> <span class="h">■</span>  280px       <span class="d">│</span>
+<span class="d">  └───────────────────────────────────────────────────┘</span>
+<span class="d">  ┌── 700px  : 2 colonnes ────────────────────────────┐</span>
+<span class="d">  │</span>     <span class="h">■</span>   ~340px          <span class="d">│</span>    <span class="h">■</span>  ~340px           <span class="d">│</span>
+<span class="d">  └───────────────────────────────────────────────────┘</span>
+<span class="d">  ┌── 320px  : 1 colonne  ────────────────────────────┐</span>
+<span class="d">  │</span>                  <span class="h">■</span>  320px                        <span class="d">│</span>
+<span class="d">  └───────────────────────────────────────────────────┘</span></pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     5. RESPONSIVE
+════════════════════════════════ -->
+<div class="chapter" id="responsive">
+  <div class="chapter-head">
+    <h2>🟣 Responsive Design - Mobile First</h2>
+    <p>Adapter la mise en page à tous les écrans avec des media queries</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Breakpoints et stratégie Mobile-First</span><span class="schema-tag tag-resp">Responsive</span></div>
+    <pre class="ascii"><span class="d">  MOBILE FIRST : on part du plus petit et on agrandit</span>
+<span class="d">  ─────────────────────────────────────────────────────</span>
+
+<span class="d">  ←─────── 320px ──────→  ←── 600px ──→  ←── 900px ──→  ←── 1200px ──→</span>
+  <span class="g">█ MOBILE</span>                <span class="y">█ TABLETTE</span>      <span class="c">█ LAPTOP</span>        <span class="p">█ DESKTOP</span>
+
+<span class="d">  ┌─────────────┐     ┌────────────────┐  ┌──────────────────────────┐</span>
+<span class="d">  │</span>   <span class="g">│LOGO│    </span> <span class="d">│</span>     <span class="d">│</span><span class="y">LOGO</span>      <span class="y">NAV</span><span class="d">│</span>  <span class="d">│</span><span class="c">LOGO</span>  <span class="c">Accueil  Section  CTA</span><span class="d">│</span>
+<span class="d">  │  ┌─────────┐│</span>     <span class="d">├────────────────┤</span>  <span class="d">├──────────────────────────┤</span>
+<span class="d">  │  │  H E R O││</span>     <span class="d">│</span>    <span class="y">HERO</span>          <span class="d">│</span>  <span class="d">│</span>     <span class="c">HERO</span>   <span class="d">│</span>  <span class="c">VISUEL</span>     <span class="d">│</span>
+<span class="d">  │  │  (100%) ││</span>     <span class="d">│</span>   <span class="d">(100%)</span>         <span class="d">│</span>  <span class="d">│</span>  <span class="d">(texte)</span>  <span class="d">│</span>  <span class="d">(card)</span>     <span class="d">│</span>
+<span class="d">  │  └─────────┘│</span>     <span class="d">├────────────────┤</span>  <span class="d">├──────────────────────────┤</span>
+<span class="d">  │  ┌─────────┐│</span>     <span class="d">│</span> <span class="y">■ feat</span> <span class="d">│</span> <span class="y">■ feat</span><span class="d">│</span>  <span class="d">│</span> <span class="c">■ feature</span> <span class="d">│</span> <span class="c">■ feature</span><span class="d">│</span>
+<span class="d">  │  │ feature ││</span>     <span class="d">│                │</span>  <span class="d">│</span> <span class="c">■ feature</span><span class="d">├──────────────</span><span class="d">│</span>
+<span class="d">  │  ├─────────┤│</span>     <span class="d">│</span> <span class="y">■ feat</span> <span class="d">│</span> <span class="y">■ feat</span><span class="d">│</span>  <span class="d">├──────────────────────────┤</span>
+<span class="d">  │  │ feature ││</span>     <span class="d">├────────────────┤</span>  <span class="d">│</span> <span class="c">■ card │ ■ card │ ■ card</span><span class="d">│</span>
+<span class="d">  │  └─────────┘│</span>     <span class="d">│</span><span class="y">■ card │ ■ card</span><span class="d">│</span>  <span class="d">└──────────────────────────┘</span>
+<span class="d">  └─────────────┘</span>     <span class="d">└────────────────┘</span>
+
+<span class="d">  CODE CSS (mobile-first avec min-width) :</span>
+<span class="d">  ─────────────────────────────────────────</span>
+  <span class="g">/* Mobile : base */</span>
+  <span class="c">.features-grid</span> { grid-template-columns: 1fr; }
+
+  <span class="y">/* Tablette ≥ 600px */</span>
+  @media (min-width: <span class="y">600px</span>) {
+    <span class="c">.features-grid</span> { grid-template-columns: repeat(<span class="y">2</span>, 1fr); }
+  }
+
+  <span class="p">/* Desktop ≥ 900px */</span>
+  @media (min-width: <span class="p">900px</span>) {
+    <span class="c">.features-grid</span> { grid-template-columns: repeat(<span class="p">3</span>, 1fr); }
+  }</pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     6. FETCH AJAX
+════════════════════════════════ -->
+<div class="chapter" id="fetch">
+  <div class="chapter-head">
+    <h2>🟡 Cycle de vie d'une requête fetch()</h2>
+    <p>Comment JavaScript communique avec le serveur sans rechargement</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">fetch() async/await - Flux complet</span><span class="schema-tag tag-js">JS</span></div>
+    <pre class="ascii"><span class="d">  NAVIGATEUR                         SERVEUR (ou fichier JSON)</span>
+<span class="d">  ─────────────────────────────────────────────────────────────</span>
+
+   <span class="j">1. await fetch('data/formations.json')</span>
+   <span class="d">│</span>
+   <span class="d">├──────────── HTTP GET ───────────────────────────────────►</span>
+   <span class="d">│</span>                                                          <span class="d">│</span>
+   <span class="d">│</span>                                        <span class="g">200 OK + JSON data</span>
+   <span class="d">◄──────────── Réponse ◄──────────────────────────────────┘</span>
+   <span class="d">│</span>
+   <span class="j">2. if (!response.ok) throw new Error()</span>  <span class="d">← Vérifier le status</span>
+   <span class="d">│</span>
+   <span class="j">3. const data = await response.json()</span>   <span class="d">← Parser le JSON</span>
+   <span class="d">│</span>
+   <span class="d">├── Succès ──► </span><span class="g">afficherFormations(data.formations)</span>
+   <span class="d">│</span>
+   <span class="d">└── Erreur ──► </span><span class="r">catch(err) → afficherMessageErreur()</span>
+   <span class="d">              └── </span><span class="j">finally → masquerLoader()</span>
+
+<span class="d">  ─────────────────────────────────────────────────────────────</span>
+<span class="d">  ÉTATS POSSIBLES DE LA REQUÊTE :</span>
+<span class="d">  ┌────────────────┬─────────────────────────────────────────┐</span>
+<span class="d">  │</span> <span class="j">État</span>           <span class="d">│</span> <span class="j">Action recommandée</span>                      <span class="d">│</span>
+<span class="d">  ├────────────────┼─────────────────────────────────────────┤</span>
+<span class="d">  │</span> <span class="y">En attente</span>     <span class="d">│</span> Afficher un spinner/loader              <span class="d">│</span>
+<span class="d">  │</span> <span class="g">200 OK</span>         <span class="d">│</span> Parser JSON et afficher les données     <span class="d">│</span>
+<span class="d">  │</span> <span class="r">404 Not Found</span>  <span class="d">│</span> Afficher "ressource introuvable"        <span class="d">│</span>
+<span class="d">  │</span> <span class="r">500 Server Err</span> <span class="d">│</span> Afficher "erreur serveur, réessayez"   <span class="d">│</span>
+<span class="d">  │</span> <span class="r">Réseau coupé</span>   <span class="d">│</span> catch() → "vérifiez votre connexion"   <span class="d">│</span>
+<span class="d">  └────────────────┴─────────────────────────────────────────┘</span>
+
+<span class="d">  ⚠ fetch() ne rejette pas pour les erreurs HTTP (404, 500)</span>
+<span class="d">     Il faut vérifier manuellement :</span> <span class="j">if (!response.ok) throw</span></pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     7. ÉVÉNEMENTS DOM
+════════════════════════════════ -->
+<div class="chapter" id="dom-events">
+  <div class="chapter-head">
+    <h2>🟡 La propagation des événements DOM</h2>
+    <p>Comment les événements se propagent dans l'arbre DOM</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Bubbling (propagation) et délégation d'événements</span><span class="schema-tag tag-js">JS</span></div>
+    <pre class="ascii"><span class="d">  CAPTURE (haut → bas)          BUBBLING (bas → haut)</span>
+<span class="d">  ─────────────────────          ───────────────────────</span>
+
+   <span class="h">document</span>                       <span class="h">document</span>
+      <span class="d">│ ▼</span>                              <span class="d">▲ │</span>
+   <span class="h">&lt;html&gt;</span>                           <span class="h">&lt;html&gt;</span>
+      <span class="d">│ ▼</span>                              <span class="d">▲ │</span>
+   <span class="h">&lt;body&gt;</span>                           <span class="h">&lt;body&gt;</span>
+      <span class="d">│ ▼</span>                              <span class="d">▲ │</span>
+   <span class="h">&lt;div&gt;</span>                            <span class="h">&lt;div&gt;</span>
+      <span class="d">│ ▼</span>                              <span class="d">▲ │</span>
+   <span class="h">&lt;button&gt;</span> <span class="g">◄── 👆 CLIC ICI</span>       <span class="h">&lt;button&gt;</span>
+
+<span class="d">  La phase de BUBBLING (remontée) permet la DÉLÉGATION :</span>
+<span class="d">  ┌─────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span>  <span class="r">✗ MAUVAIS (1 listener par bouton)</span>                 <span class="d">│</span>
+<span class="d">  │</span>  <span class="j">boutons.forEach(btn => btn.addEventListener(...))</span>  <span class="d">│</span>
+<span class="d">  │</span>                                                     <span class="d">│</span>
+<span class="d">  │</span>  <span class="g">✓ BON (délégation sur le parent)</span>                  <span class="d">│</span>
+<span class="d">  │</span>  <span class="j">parent.addEventListener('click', (e) => {</span>          <span class="d">│</span>
+<span class="d">  │</span>  <span class="j">  if (e.target.matches('.btn-filtre')) { ... }</span>      <span class="d">│</span>
+<span class="d">  │</span>  <span class="j">})</span>                                                 <span class="d">│</span>
+<span class="d">  │</span>                                                     <span class="d">│</span>
+<span class="d">  │</span>  <span class="y">Avantage :</span> fonctionne même pour les éléments       <span class="d">│</span>
+<span class="d">  │</span>  ajoutés dynamiquement après coup                   <span class="d">│</span>
+<span class="d">  └─────────────────────────────────────────────────────┘</span>
+
+<span class="d">  event.stopPropagation() ── arrête la remontée</span>
+<span class="d">  event.preventDefault()  ── annule le comportement natif</span>
+<span class="d">                              (ex: submit → ne recharge pas)</span></pre>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     8. ACCESSIBILITÉ
+════════════════════════════════ -->
+<div class="chapter" id="accessibilite">
+  <div class="chapter-head">
+    <h2>🟢 Accessibilité - WCAG & ARIA</h2>
+    <p>Rendre les interfaces utilisables par tous</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Les 4 principes WCAG + ARIA en pratique</span><span class="schema-tag tag-access">Accessibilité</span></div>
+    <pre class="ascii"><span class="d">  LES 4 PRINCIPES WCAG (POUR) :</span>
+<span class="d">  ┌─────────────┬──────────────────────────────────────────┐</span>
+<span class="d">  │</span> <span class="g">P</span>erceptible  <span class="d">│</span> alt sur images, sous-titres vidéos,       <span class="d">│</span>
+<span class="d">  │</span>              <span class="d">│</span> contraste suffisant (≥ 4.5:1)              <span class="d">│</span>
+<span class="d">  ├─────────────┼──────────────────────────────────────────┤</span>
+<span class="d">  │</span> <span class="c">U</span>tilisable   <span class="d">│</span> navigation clavier (Tab/Enter/Espace),     <span class="d">│</span>
+<span class="d">  │</span>              <span class="d">│</span> focus visible, pas de piège clavier        <span class="d">│</span>
+<span class="d">  ├─────────────┼──────────────────────────────────────────┤</span>
+<span class="d">  │</span> <span class="y">R</span>obuste      <span class="d">│</span> HTML valide W3C, ARIA correct,             <span class="d">│</span>
+<span class="d">  │</span>              <span class="d">│</span> compatible lecteurs d'écran                <span class="d">│</span>
+<span class="d">  ├─────────────┼──────────────────────────────────────────┤</span>
+<span class="d">  │</span> <span class="p">O</span>mnipréhensible│ langue déclarée, labels clairs,          <span class="d">│</span>
+<span class="d">  │</span>              <span class="d">│</span> messages d'erreur explicites               <span class="d">│</span>
+<span class="d">  └─────────────┴──────────────────────────────────────────┘</span>
+
+<span class="d">  ARIA - QUAND ET COMMENT :</span>
+<span class="d">  ┌───────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span>                                                       <span class="d">│</span>
+<span class="d">  │</span>  <span class="g">✓ Menu burger accessible :</span>                          <span class="d">│</span>
+<span class="d">  │</span>  <span class="h">&lt;button</span> <span class="a">aria-expanded=</span><span class="g">"false"</span>                       <span class="d">│</span>
+<span class="d">  │</span>          <span class="a">aria-controls=</span><span class="g">"mobile-menu"</span>                 <span class="d">│</span>
+<span class="d">  │</span>          <span class="a">aria-label=</span><span class="g">"Ouvrir le menu"</span><span class="h">&gt;</span>                <span class="d">│</span>
+<span class="d">  │</span>                                                       <span class="d">│</span>
+<span class="d">  │</span>  <span class="g">✓ Contenu dynamique (formations chargées) :</span>         <span class="d">│</span>
+<span class="d">  │</span>  <span class="h">&lt;div</span> <span class="a">aria-live=</span><span class="g">"polite"</span><span class="h">&gt;</span>                            <span class="d">│</span>
+<span class="d">  │</span>  → annonce les mises à jour aux lecteurs d'écran      <span class="d">│</span>
+<span class="d">  │</span>                                                       <span class="d">│</span>
+<span class="d">  │</span>  <span class="g">✓ Navigation entre sections :</span>                      <span class="d">│</span>
+<span class="d">  │</span>  <span class="h">&lt;nav</span> <span class="a">aria-label=</span><span class="g">"Navigation principale"</span><span class="h">&gt;</span>            <span class="d">│</span>
+<span class="d">  │</span>  <span class="h">&lt;section</span> <span class="a">aria-labelledby=</span><span class="g">"titre-section"</span><span class="h">&gt;</span>          <span class="d">│</span>
+<span class="d">  │</span>                                                       <span class="d">│</span>
+<span class="d">  │</span>  <span class="r">✗ Ne pas abuser de ARIA :</span>                          <span class="d">│</span>
+<span class="d">  │</span>  "No ARIA is better than bad ARIA"                    <span class="d">│</span>
+<span class="d">  │</span>  Toujours préférer une balise HTML sémantique native  <span class="d">│</span>
+<span class="d">  └───────────────────────────────────────────────────────┘</span>
+
+<span class="d">  CONTRASTE COULEUR (WCAG AA) :</span>
+<span class="d">  ┌──────────────────┬──────────────────────────────────┐</span>
+<span class="d">  │</span> Texte normal     <span class="d">│</span> ratio ≥ <span class="y">4.5:1</span>                  <span class="d">│</span>
+<span class="d">  │</span> Texte large      <span class="d">│</span> ratio ≥ <span class="g">3:1</span>                    <span class="d">│</span>
+<span class="d">  │</span> Composants UI    <span class="d">│</span> ratio ≥ <span class="g">3:1</span>                    <span class="d">│</span>
+<span class="d">  └──────────────────┴──────────────────────────────────┘</span>
+  <span class="d">Outil :</span> <span class="a">WebAIM Contrast Checker</span></pre>
+  </div>
+
+  <div class="good-bad">
+    <div class="gb-card gb-good">
+      <div class="gb-head">✓ HTML Sémantique (bon)</div>
+      <pre class="ascii"><span class="h">&lt;header&gt;</span>
+  <span class="h">&lt;nav</span> <span class="a">aria-label</span>=<span class="g">"principale"</span><span class="h">&gt;</span>
+    <span class="h">&lt;ul&gt;&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="g">"#"</span><span class="h">&gt;</span>Accueil<span class="h">&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</span>
+  <span class="h">&lt;/nav&gt;</span>
+<span class="h">&lt;/header&gt;</span>
+<span class="h">&lt;main&gt;</span>
+  <span class="h">&lt;section</span> <span class="a">aria-labelledby</span>=<span class="g">"titre"</span><span class="h">&gt;</span>
+    <span class="h">&lt;h2</span> <span class="a">id</span>=<span class="g">"titre"</span><span class="h">&gt;</span>Section<span class="h">&lt;/h2&gt;</span>
+  <span class="h">&lt;/section&gt;</span>
+<span class="h">&lt;/main&gt;</span></pre>
+    </div>
+    <div class="gb-card gb-bad">
+      <div class="gb-head">✗ Divs génériques (mauvais)</div>
+      <pre class="ascii"><span class="r">&lt;div class="header"&gt;</span>
+  <span class="r">&lt;div class="nav"&gt;</span>
+    <span class="r">&lt;div class="nav-item"&gt;</span>Accueil<span class="r">&lt;/div&gt;</span>
+  <span class="r">&lt;/div&gt;</span>
+<span class="r">&lt;/div&gt;</span>
+<span class="r">&lt;div class="main"&gt;</span>
+  <span class="r">&lt;div class="section"&gt;</span>
+    <span class="r">&lt;div class="titre"&gt;</span>Section<span class="r">&lt;/div&gt;</span>
+  <span class="r">&lt;/div&gt;</span>
+<span class="r">&lt;/div&gt;</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     9. ORGANISATION PROJET
+════════════════════════════════ -->
+<div class="chapter" id="organisation">
+  <div class="chapter-head">
+    <h2>📁 Organisation du projet EC01</h2>
+    <p>Structure de fichiers attendue par le sujet</p>
+  </div>
+
+  <div class="schema">
+    <div class="schema-header"><span class="schema-title">Structure minimale du projet SkillHub</span><span class="schema-tag tag-html">HTML</span></div>
+    <pre class="ascii"><span class="d">  skillhub/</span>
+  <span class="d">├──</span> <span class="h">index.html</span>           <span class="d">← Page principale (unique)</span>
+  <span class="d">│</span>
+  <span class="d">├──</span> <span class="c">css/</span>
+  <span class="d">│   └──</span> <span class="c">style.css</span>       <span class="d">← Toutes les règles CSS</span>
+  <span class="d">│</span>
+  <span class="d">├──</span> <span class="j">js/</span>
+  <span class="d">│   └──</span> <span class="j">app.js</span>          <span class="d">← Tout le JavaScript</span>
+  <span class="d">│</span>
+  <span class="d">├──</span> <span class="y">data/</span>
+  <span class="d">│   └──</span> <span class="y">formations.json</span> <span class="d">← Données (chargées via fetch)</span>
+  <span class="d">│</span>
+  <span class="d">└──</span> <span class="p">assets/</span>
+      <span class="d">├──</span> <span class="p">logo.webp</span>        <span class="d">← Logo principal</span>
+      <span class="d">└──</span> <span class="p">logo-icon.webp</span>   <span class="d">← Icône (favicon, mobile)</span>
+
+<span class="d">  SECTIONS DE LA LANDING PAGE (ordre logique) :</span>
+<span class="d">  ┌────────────────────────────────────────────────────┐</span>
+<span class="d">  │</span>  1. <span class="h">&lt;header&gt;</span>    → Logo + Navigation + Burger        <span class="d">│</span>
+<span class="d">  │</span>  2. <span class="h">#hero</span>       → Titre h1 + Description + CTA       <span class="d">│</span>
+<span class="d">  │</span>  3. <span class="h">#fonctionnalites</span> → 3+ fonctionnalités + icônes  <span class="d">│</span>
+<span class="d">  │</span>  4. <span class="h">#formations</span>  → Chargées via fetch() JSON         <span class="d">│</span>
+<span class="d">  │</span>  5. <span class="h">#cta</span>         → Boutons d'appel à l'action         <span class="d">│</span>
+<span class="d">  │</span>  6. <span class="h">#contact</span>     → Formulaire géré en JS              <span class="d">│</span>
+<span class="d">  │</span>  7. <span class="h">&lt;footer&gt;</span>     → Mentions légales + Copyright       <span class="d">│</span>
+<span class="d">  └────────────────────────────────────────────────────┘</span>
+
+<span class="d">  INTERACTIONS JS REQUISES (minimum 2) :</span>
+  <span class="g">✓</span> Menu burger (ouverture/fermeture)
+  <span class="g">✓</span> fetch() formations depuis JSON
+  <span class="g">✓</span> Filtrage des formations par niveau
+  <span class="g">✓</span> Animation au scroll (IntersectionObserver)
+  <span class="g">✓</span> Bouton retour en haut
+  <span class="g">✓</span> Validation formulaire</pre>
+  </div>
+</div>
+
+</div><!-- /.page -->
+</body>
+</html>

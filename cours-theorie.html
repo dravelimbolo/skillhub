@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cours Théorique - HTML · CSS · JS · Accessibilité · Responsive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;
+  --border:#30363d;--border2:#444c56;
+  --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --blue:#58a6ff;--blue2:#1f6feb;--blue-bg:rgba(31,111,235,.15);
+  --green:#3fb950;--green-bg:rgba(63,185,80,.12);
+  --orange:#f0883e;--orange-bg:rgba(240,136,62,.12);
+  --red:#f85149;--red-bg:rgba(248,81,73,.12);
+  --purple:#bc8cff;--purple-bg:rgba(188,140,255,.12);
+  --yellow:#e3b341;--yellow-bg:rgba(227,179,65,.12);
+  --radius:8px;--radius-lg:14px;
+  --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+
+/* Sidebar */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.sidebar-logo h1{font-size:1rem;font-weight:700;color:var(--text)}
+.sidebar-logo span{font-size:.75rem;color:var(--text2);display:block;margin-top:.2rem}
+.sidebar-section{padding:.25rem 0}
+.sidebar-section-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:.5rem 1.25rem;display:block}
+.sidebar a{display:flex;align-items:center;gap:.5rem;padding:.4rem 1.25rem;font-size:.83rem;font-weight:500;color:var(--text2);text-decoration:none;border-radius:0;transition:.15s;border-left:2px solid transparent}
+.sidebar a:hover{color:var(--text);background:var(--bg3)}
+.sidebar a.active{color:var(--blue);border-left-color:var(--blue);background:var(--blue-bg)}
+.sidebar a .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* Contenu principal */
+.main{padding:0;overflow-x:hidden}
+.main-inner{max-width:860px;margin:0 auto;padding:3rem 2.5rem}
+
+/* En-têtes de section */
+.chapter{margin-bottom:5rem;padding-top:1rem}
+.chapter-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .8rem;border-radius:50px;margin-bottom:1rem}
+.badge-html{background:var(--orange-bg);color:var(--orange)}
+.badge-css{background:var(--blue-bg);color:var(--blue)}
+.badge-js{background:var(--yellow-bg);color:var(--yellow)}
+.badge-access{background:var(--green-bg);color:var(--green)}
+.badge-resp{background:var(--purple-bg);color:var(--purple)}
+.badge-bp{background:var(--red-bg);color:var(--red)}
+
+.chapter h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:var(--text);margin-bottom:.5rem;line-height:1.2}
+.chapter>.intro{color:var(--text2);font-size:1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+
+/* Blocks */
+h3{font-size:1.05rem;font-weight:700;color:var(--text);margin:2rem 0 .75rem;padding-left:.75rem;border-left:3px solid var(--blue)}
+h4{font-size:.9rem;font-weight:600;color:var(--text2);margin:1.25rem 0 .5rem;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+
+p{color:var(--text2);margin-bottom:.9rem;font-size:.95rem}
+ul,ol{margin:.5rem 0 1rem 1.5rem;color:var(--text2);font-size:.9rem}
+li{margin-bottom:.35rem;line-height:1.6}
+strong{color:var(--text);font-weight:600}
+code{font-family:var(--mono);background:var(--bg3);color:var(--orange);padding:.12em .4em;border-radius:4px;font-size:.85em;border:1px solid var(--border)}
+
+/* Boîtes */
+.box{border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin:1.25rem 0;border:1px solid}
+.box-tip{background:var(--green-bg);border-color:rgba(63,185,80,.3)}
+.box-warn{background:var(--orange-bg);border-color:rgba(240,136,62,.3)}
+.box-info{background:var(--blue-bg);border-color:rgba(88,166,255,.3)}
+.box-danger{background:var(--red-bg);border-color:rgba(248,81,73,.3)}
+.box-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.box-tip .box-title{color:var(--green)}
+.box-warn .box-title{color:var(--orange)}
+.box-info .box-title{color:var(--blue)}
+.box-danger .box-title{color:var(--red)}
+.box p{margin:0;font-size:.88rem}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:var(--bg3);color:var(--text);font-weight:600;padding:.65rem 1rem;text-align:left;border:1px solid var(--border)}
+td{padding:.6rem 1rem;border:1px solid var(--border);color:var(--text2)}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+/* Grille de concepts */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.25rem 0}
+.concept-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.2rem;transition:.2s}
+.concept-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.concept-icon{font-size:1.4rem;margin-bottom:.5rem}
+.concept-title{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.concept-desc{font-size:.78rem;color:var(--text2);line-height:1.5}
+
+/* Tag list */
+.tag-list{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.tag{font-family:var(--mono);font-size:.78rem;padding:.25rem .65rem;border-radius:4px;border:1px solid}
+.tag-html{background:var(--orange-bg);border-color:rgba(240,136,62,.4);color:var(--orange)}
+.tag-css{background:var(--blue-bg);border-color:rgba(88,166,255,.4);color:var(--blue)}
+.tag-js{background:var(--yellow-bg);border-color:rgba(227,179,65,.4);color:var(--yellow)}
+.tag-green{background:var(--green-bg);border-color:rgba(63,185,80,.4);color:var(--green)}
+
+/* Accordion FAQ */
+.faq{margin:1rem 0}
+.faq-item{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.5rem;overflow:hidden}
+.faq-q{background:var(--bg2);padding:.85rem 1.1rem;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:1rem;user-select:none;transition:.15s}
+.faq-q:hover{background:var(--bg3)}
+.faq-q::after{content:'›';font-size:1.2rem;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-q::after{transform:rotate(90deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+.faq-item.open .faq-a{max-height:400px}
+.faq-a-inner{padding:.85rem 1.1rem;border-top:1px solid var(--border);font-size:.86rem;color:var(--text2);line-height:1.65}
+
+/* Checklist */
+.checklist{list-style:none;margin:.75rem 0;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:.6rem;padding:.3rem 0;font-size:.88rem;color:var(--text2)}
+.checklist li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:.1rem}
+.checklist li.warn::before{content:'⚠';color:var(--orange)}
+.checklist li.bad::before{content:'✗';color:var(--red)}
+
+/* Progress bar indicateur */
+.level-bar{display:flex;align-items:center;gap:.75rem;margin:.4rem 0;font-size:.82rem}
+.level-bar-label{width:120px;color:var(--text2);flex-shrink:0}
+.level-bar-track{flex:1;height:6px;background:var(--bg3);border-radius:50px;overflow:hidden}
+.level-bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--blue),var(--green))}
+
+/* Top nav */
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topnav-title{font-size:.85rem;font-weight:600;color:var(--text2)}
+.topnav-progress{font-size:.75rem;color:var(--text3)}
+
+/* Responsive sidebar */
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main-inner{padding:2rem 1.25rem}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar" aria-label="Table des matières">
+  <div class="sidebar-logo">
+    <h1>📖 Cours Théorique</h1>
+    <span>EC01 - Révision complète</span>
+  </div>
+  <nav>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">HTML5</span>
+      <a href="#html-semantique"><span class="dot"></span>Sémantique</a>
+      <a href="#html-structure"><span class="dot"></span>Structure de base</a>
+      <a href="#html-balises"><span class="dot"></span>Balises essentielles</a>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">CSS3</span>
+      <a href="#css-bases"><span class="dot"></span>Bases et sélecteurs</a>
+      <a href="#css-flexbox"><span class="dot"></span>Flexbox</a>
+      <a href="#css-grid"><span class="dot"></span>CSS Grid</a>
+      <a href="#css-variables"><span class="dot"></span>Variables CSS</a>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">JavaScript</span>
+      <a href="#js-bases"><span class="dot"></span>Bases ES6+</a>
+      <a href="#js-dom"><span class="dot"></span>Manipulation DOM</a>
+      <a href="#js-events"><span class="dot"></span>Événements</a>
+      <a href="#js-ajax"><span class="dot"></span>AJAX / fetch</a>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Accessibilité</span>
+      <a href="#access-aria"><span class="dot"></span>ARIA & sémantique</a>
+      <a href="#access-pratiques"><span class="dot"></span>Bonnes pratiques</a>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Responsive</span>
+      <a href="#resp-mediaqueries"><span class="dot"></span>Media queries</a>
+      <a href="#resp-mobile-first"><span class="dot"></span>Mobile-first</a>
+    </div>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Bonnes pratiques</span>
+      <a href="#bp-code"><span class="dot"></span>Qualité du code</a>
+      <a href="#bp-perf"><span class="dot"></span>Performance</a>
+      <a href="#bp-seo"><span class="dot"></span>SEO</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ═══════════════ CONTENU ═══════════════ -->
+<div class="main">
+  <div class="topnav">
+    <span class="topnav-title">Cours Théorique - HTML · CSS · JS · Accessibilité · Responsive</span>
+    <span class="topnav-progress">6 chapitres</span>
+  </div>
+  <div class="main-inner">
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 1 - HTML5
+    ══════════════════════════════════ -->
+    <section class="chapter" id="html-semantique">
+      <p class="chapter-badge badge-html">🟠 Chapitre 1</p>
+      <h2>HTML5 - Structure & Sémantique</h2>
+      <p class="intro">Le HTML5 est le langage de balisage qui structure le contenu d'une page web. La sémantique, c'est choisir la <strong>bonne balise pour le bon contenu</strong> - ce qui impacte directement le SEO, l'accessibilité et la maintenabilité.</p>
+
+      <h3 id="html-structure">Structure de base d'une page HTML5</h3>
+      <p>Toute page doit commencer par ces éléments fondamentaux :</p>
+      <ul>
+        <li><code>&lt;!DOCTYPE html&gt;</code> - Déclaration du type de document (HTML5)</li>
+        <li><code>&lt;html lang="fr"&gt;</code> - Racine, avec l'attribut <code>lang</code> obligatoire pour l'accessibilité</li>
+        <li><code>&lt;head&gt;</code> - Métadonnées (charset, viewport, titre, CSS…)</li>
+        <li><code>&lt;meta charset="UTF-8"&gt;</code> - Encodage universel des caractères</li>
+        <li><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> - Indispensable pour le responsive</li>
+        <li><code>&lt;body&gt;</code> - Contenu visible de la page</li>
+      </ul>
+
+      <div class="box box-warn">
+        <div class="box-title">⚠ Piège fréquent</div>
+        <p>Oublier <code>lang="fr"</code> sur la balise <code>&lt;html&gt;</code> est une erreur d'accessibilité : les lecteurs d'écran ne savent plus dans quelle langue prononcer le contenu.</p>
+      </div>
+
+      <h3 id="html-balises">Les balises sémantiques essentielles</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Balise</th><th>Rôle sémantique</th><th>Utilisation typique</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;header&gt;</code></td><td>En-tête de page ou de section</td><td>Logo, navigation principale</td></tr>
+            <tr><td><code>&lt;nav&gt;</code></td><td>Zone de navigation</td><td>Menu, fil d'ariane</td></tr>
+            <tr><td><code>&lt;main&gt;</code></td><td>Contenu principal unique</td><td>Une seule fois par page</td></tr>
+            <tr><td><code>&lt;section&gt;</code></td><td>Section thématique</td><td>Parties d'une page avec <code>h2/h3</code></td></tr>
+            <tr><td><code>&lt;article&gt;</code></td><td>Contenu autonome, réutilisable</td><td>Blog post, carte produit</td></tr>
+            <tr><td><code>&lt;aside&gt;</code></td><td>Contenu complémentaire</td><td>Sidebar, note connexe</td></tr>
+            <tr><td><code>&lt;footer&gt;</code></td><td>Pied de page ou de section</td><td>Mentions légales, copyright</td></tr>
+            <tr><td><code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code></td><td>Média avec légende</td><td>Image illustrant un article</td></tr>
+            <tr><td><code>&lt;time&gt;</code></td><td>Date/heure lisible par les machines</td><td><code>&lt;time datetime="2025-01-01"&gt;</code></td></tr>
+            <tr><td><code>&lt;address&gt;</code></td><td>Informations de contact</td><td>Email, adresse postale</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Hiérarchie des titres - Règle d'or</h3>
+      <p>La hiérarchie des titres doit être <strong>logique et séquentielle</strong>. Ne pas sauter de niveaux !</p>
+      <ul>
+        <li><code>&lt;h1&gt;</code> - Un seul par page. Titre principal du contenu.</li>
+        <li><code>&lt;h2&gt;</code> - Sections principales (apparaissent dans la sidebar)</li>
+        <li><code>&lt;h3&gt;</code> - Sous-sections d'un h2</li>
+        <li><code>&lt;h4&gt;</code> - Rarement nécessaire. Réfléchir à restructurer.</li>
+      </ul>
+      <div class="box box-danger">
+        <div class="box-title">✗ À ne jamais faire</div>
+        <p>Utiliser <code>&lt;h3&gt;</code> après <code>&lt;h1&gt;</code> en sautant <code>&lt;h2&gt;</code>. Ou pire : utiliser les balises de titre juste pour leur taille - c'est le rôle du CSS !</p>
+      </div>
+
+      <h3>Formulaires accessibles</h3>
+      <p>Un formulaire bien structuré doit toujours associer chaque champ à son libellé :</p>
+      <ul>
+        <li><code>&lt;label for="id"&gt;</code> lié à <code>&lt;input id="id"&gt;</code> - Association explicite</li>
+        <li><code>required</code>, <code>type</code>, <code>autocomplete</code> - Attributs HTML5 natifs</li>
+        <li><code>aria-describedby</code> - Pour associer un message d'aide ou d'erreur</li>
+        <li><code>aria-invalid="true"</code> - Signaler une erreur de validation</li>
+        <li><code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> - Pour grouper des champs liés</li>
+      </ul>
+
+      <div class="faq">
+        <div class="faq-item">
+          <div class="faq-q">Quelle différence entre &lt;section&gt; et &lt;div&gt; ?</div>
+          <div class="faq-a"><div class="faq-a-inner"><code>&lt;section&gt;</code> est sémantique : elle représente une partie thématique du contenu et doit avoir un titre (<code>h2</code>, <code>h3</code>…). <code>&lt;div&gt;</code> est un conteneur générique sans signification sémantique - à réserver pour les besoins purement de mise en page.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Peut-on avoir plusieurs &lt;header&gt; dans une page ?</div>
+          <div class="faq-a"><div class="faq-a-inner">Oui ! <code>&lt;header&gt;</code> peut être utilisé dans chaque <code>&lt;article&gt;</code> ou <code>&lt;section&gt;</code>. Il représente l'en-tête de l'élément parent, pas forcément de la page entière. En revanche, <code>&lt;main&gt;</code> ne doit apparaître qu'une seule fois.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">L'attribut alt est-il toujours obligatoire sur les images ?</div>
+          <div class="faq-a"><div class="faq-a-inner">L'attribut <code>alt</code> est toujours <strong>présent</strong>, mais il peut être vide (<code>alt=""</code>) si l'image est purement décorative. Dans ce cas, le lecteur d'écran l'ignorera complètement. S'il est absent, le lecteur d'écran lira le nom du fichier - ce qui est inutile et perturbant.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 2 - CSS3
+    ══════════════════════════════════ -->
+    <section class="chapter" id="css-bases">
+      <p class="chapter-badge badge-css">🔵 Chapitre 2</p>
+      <h2>CSS3 - Mise en page & Design</h2>
+      <p class="intro">Le CSS3 contrôle la présentation visuelle. Maîtriser la <strong>cascade, la spécificité, Flexbox et Grid</strong> est indispensable pour créer des interfaces modernes et maintenables.</p>
+
+      <h3>La cascade et la spécificité</h3>
+      <p>Quand plusieurs règles s'appliquent au même élément, le CSS choisit selon :</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sélecteur</th><th>Spécificité</th><th>Exemple</th></tr></thead>
+          <tbody>
+            <tr><td>Élément</td><td>0-0-1</td><td><code>p { }</code></td></tr>
+            <tr><td>Classe, attribut, pseudo-classe</td><td>0-1-0</td><td><code>.btn { }</code></td></tr>
+            <tr><td>ID</td><td>1-0-0</td><td><code>#header { }</code></td></tr>
+            <tr><td>Style inline</td><td>1-0-0-0</td><td><code>style="color:red"</code></td></tr>
+            <tr><td><code>!important</code></td><td>Priorité absolue</td><td>À éviter !</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box box-tip">
+        <div class="box-title">💡 Bonne pratique</div>
+        <p>Préférer les classes aux IDs en CSS. Éviter <code>!important</code> sauf en dernier recours. Structurer vos sélecteurs pour garder une spécificité basse.</p>
+      </div>
+
+      <h3 id="css-variables">Variables CSS (Custom Properties)</h3>
+      <p>Les variables CSS permettent de centraliser les valeurs réutilisables et de faciliter la maintenance :</p>
+      <ul>
+        <li>Déclaration : <code>:root { --couleur-primaire: #1a5fa8; }</code></li>
+        <li>Utilisation : <code>color: var(--couleur-primaire);</code></li>
+        <li>Valeur par défaut : <code>var(--ma-var, #fallback)</code></li>
+        <li>Modifiables dynamiquement avec JavaScript : <code>el.style.setProperty('--var', val)</code></li>
+      </ul>
+
+      <h3 id="css-flexbox">Flexbox - Mise en page 1D</h3>
+      <p>Flexbox est conçu pour aligner des éléments sur <strong>un seul axe</strong> (ligne ou colonne).</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Propriété</th><th>Valeurs clés</th><th>Effet</th></tr></thead>
+          <tbody>
+            <tr><td><code>display: flex</code></td><td>-</td><td>Active Flexbox sur le conteneur</td></tr>
+            <tr><td><code>flex-direction</code></td><td><code>row</code> | <code>column</code></td><td>Axe principal</td></tr>
+            <tr><td><code>justify-content</code></td><td><code>center</code> | <code>space-between</code> | <code>flex-start</code></td><td>Alignement axe principal</td></tr>
+            <tr><td><code>align-items</code></td><td><code>center</code> | <code>stretch</code> | <code>flex-start</code></td><td>Alignement axe croisé</td></tr>
+            <tr><td><code>flex-wrap</code></td><td><code>wrap</code> | <code>nowrap</code></td><td>Retour à la ligne auto</td></tr>
+            <tr><td><code>gap</code></td><td><code>1rem</code> | <code>1rem 2rem</code></td><td>Espacement entre éléments</td></tr>
+            <tr><td><code>flex: 1</code></td><td>Raccourci grow/shrink/basis</td><td>L'élément occupe l'espace disponible</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="css-grid">CSS Grid - Mise en page 2D</h3>
+      <p>CSS Grid est conçu pour des mises en page <strong>bi-dimensionnelles</strong> (lignes ET colonnes).</p>
+      <ul>
+        <li><code>display: grid</code> - Active le Grid</li>
+        <li><code>grid-template-columns: repeat(3, 1fr)</code> - 3 colonnes égales</li>
+        <li><code>grid-template-columns: 260px 1fr</code> - Sidebar + contenu</li>
+        <li><code>grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))</code> - Grille responsive automatique</li>
+        <li><code>gap: 1.5rem</code> - Espacement entre cellules</li>
+        <li><code>grid-column: 1 / -1</code> - L'élément s'étend sur toute la largeur</li>
+      </ul>
+
+      <div class="box box-info">
+        <div class="box-title">ℹ Flex vs Grid : quand utiliser lequel ?</div>
+        <p><strong>Flexbox</strong> : navigation, boutons côte à côte, centrer un élément, layout 1D.<br>
+        <strong>Grid</strong> : layout de page complet, galeries, grilles de cards, layout 2D.</p>
+      </div>
+
+      <h3>Pseudo-classes et pseudo-éléments utiles</h3>
+      <div class="concept-grid">
+        <div class="concept-card"><div class="concept-icon">🖱</div><div class="concept-title">:hover</div><div class="concept-desc">État au survol de la souris</div></div>
+        <div class="concept-card"><div class="concept-icon">🔍</div><div class="concept-title">:focus</div><div class="concept-desc">Élément qui a le focus clavier</div></div>
+        <div class="concept-card"><div class="concept-icon">✔</div><div class="concept-title">:focus-visible</div><div class="concept-desc">Focus visible uniquement au clavier</div></div>
+        <div class="concept-card"><div class="concept-icon">🔢</div><div class="concept-title">:nth-child()</div><div class="concept-desc">Cible le nième enfant</div></div>
+        <div class="concept-card"><div class="concept-icon">▶</div><div class="concept-title">::before/::after</div><div class="concept-desc">Contenu généré avant/après</div></div>
+        <div class="concept-card"><div class="concept-icon">📍</div><div class="concept-title">:not()</div><div class="concept-desc">Tout sauf ce sélecteur</div></div>
+      </div>
+
+      <h3>Transitions et animations</h3>
+      <ul>
+        <li><code>transition: all 0.3s ease</code> - Transition sur toutes les propriétés</li>
+        <li><code>transition: color 0.2s, transform 0.3s cubic-bezier(0.4,0,0.2,1)</code> - Cibler des propriétés spécifiques</li>
+        <li><code>@keyframes nomAnimation { from { } to { } }</code> - Définir une animation</li>
+        <li><code>animation: nomAnimation 0.5s ease both</code> - Appliquer l'animation</li>
+        <li><code>transform: translateY(-4px) scale(1.02)</code> - Effets de hover performants</li>
+      </ul>
+      <div class="box box-tip">
+        <div class="box-title">💡 Performance</div>
+        <p>Animer uniquement <code>transform</code> et <code>opacity</code> - ces propriétés sont optimisées par le GPU et n'entraînent pas de reflow. Éviter d'animer <code>width</code>, <code>height</code>, <code>top</code>, <code>left</code>.</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 3 - JAVASCRIPT
+    ══════════════════════════════════ -->
+    <section class="chapter" id="js-bases">
+      <p class="chapter-badge badge-js">🟡 Chapitre 3</p>
+      <h2>JavaScript ES6+ - Interactivité</h2>
+      <p class="intro">Le JavaScript côté client permet de rendre les pages <strong>interactives et dynamiques</strong>. Maîtriser ES6+, la manipulation du DOM et les requêtes asynchrones est la base du développement front-end.</p>
+
+      <h3>Déclarations de variables - ES6+</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mot-clé</th><th>Portée</th><th>Réassignable</th><th>Hoisting</th></tr></thead>
+          <tbody>
+            <tr><td><code>var</code></td><td>Fonction</td><td>✓</td><td>Oui (à éviter)</td></tr>
+            <tr><td><code>let</code></td><td>Bloc</td><td>✓</td><td>Non (TDZ)</td></tr>
+            <tr><td><code>const</code></td><td>Bloc</td><td>✗</td><td>Non (TDZ)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box box-tip">
+        <div class="box-title">💡 Règle pratique</div>
+        <p>Utiliser <code>const</code> par défaut. Passer à <code>let</code> uniquement si la valeur doit être réassignée. Ne jamais utiliser <code>var</code>.</p>
+      </div>
+
+      <h3>Fonctions ES6+</h3>
+      <ul>
+        <li><strong>Arrow function</strong> : <code>const double = x =&gt; x * 2;</code> - Syntaxe concise, pas de <code>this</code> propre</li>
+        <li><strong>Paramètres par défaut</strong> : <code>function saluer(nom = 'Utilisateur') { }</code></li>
+        <li><strong>Template literals</strong> : <code>`Bonjour ${nom}, tu as ${age} ans`</code></li>
+        <li><strong>Destructuring</strong> : <code>const { title, level } = formation;</code></li>
+        <li><strong>Spread</strong> : <code>const all = [...array1, ...array2];</code></li>
+        <li><strong>Optional chaining</strong> : <code>user?.address?.city</code> - Évite les erreurs null</li>
+      </ul>
+
+      <h3 id="js-dom">Manipulation du DOM</h3>
+      <p>Le DOM (Document Object Model) est l'interface qui représente la page HTML sous forme d'arbre d'objets manipulables.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Méthode</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td><code>document.getElementById('id')</code></td><td>Sélectionne par ID (1 élément)</td></tr>
+            <tr><td><code>document.querySelector('.classe')</code></td><td>Premier élément correspondant au sélecteur CSS</td></tr>
+            <tr><td><code>document.querySelectorAll('li')</code></td><td>NodeList de tous les éléments correspondants</td></tr>
+            <tr><td><code>element.innerHTML = '...'</code></td><td>Modifie le contenu HTML (attention XSS !)</td></tr>
+            <tr><td><code>element.textContent = '...'</code></td><td>Modifie le texte (sûr contre XSS)</td></tr>
+            <tr><td><code>element.classList.add/remove/toggle</code></td><td>Modifie les classes CSS</td></tr>
+            <tr><td><code>element.setAttribute('aria-expanded', 'true')</code></td><td>Modifie un attribut HTML</td></tr>
+            <tr><td><code>document.createElement('div')</code></td><td>Crée un nouvel élément</td></tr>
+            <tr><td><code>parent.appendChild(enfant)</code></td><td>Ajoute un enfant dans le DOM</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="js-events">Événements</h3>
+      <ul>
+        <li><code>element.addEventListener('click', handler)</code> - Attacher un événement</li>
+        <li><code>element.removeEventListener('click', handler)</code> - Supprimer un événement</li>
+        <li><strong>Délégation d'événement</strong> : écouter sur le parent et cibler avec <code>event.target</code></li>
+        <li><code>event.preventDefault()</code> - Annuler le comportement natif (ex: soumission de formulaire)</li>
+        <li><code>event.stopPropagation()</code> - Empêcher la propagation vers les parents</li>
+      </ul>
+      <p>Les événements courants : <code>click</code>, <code>input</code>, <code>submit</code>, <code>keydown</code>, <code>scroll</code>, <code>resize</code>, <code>DOMContentLoaded</code>.</p>
+
+      <h3 id="js-ajax">AJAX - fetch() et async/await</h3>
+      <p>AJAX (Asynchronous JavaScript and XML) permet de communiquer avec un serveur <strong>sans recharger la page</strong>. En ES6+, on utilise <code>fetch()</code> avec <code>async/await</code>.</p>
+      <ul>
+        <li><code>fetch(url)</code> retourne une <strong>Promise</strong></li>
+        <li><code>response.ok</code> - Vérifie si la réponse est un succès (status 200-299)</li>
+        <li><code>response.json()</code> - Parse la réponse JSON (aussi une Promise)</li>
+        <li>Toujours entourer d'un <code>try/catch</code> pour gérer les erreurs réseau</li>
+      </ul>
+      <div class="box box-info">
+        <div class="box-title">ℹ Promesses vs async/await</div>
+        <p>Les deux sont équivalents. <code>async/await</code> est plus lisible pour les débutants. <code>.then().catch()</code> est plus compact pour les opérations chaînées simples. En pratique, préférer <code>async/await</code>.</p>
+      </div>
+
+      <h3>Méthodes de tableaux ES6+ indispensables</h3>
+      <div class="tag-list">
+        <span class="tag tag-js">.map()</span>
+        <span class="tag tag-js">.filter()</span>
+        <span class="tag tag-js">.reduce()</span>
+        <span class="tag tag-js">.find()</span>
+        <span class="tag tag-js">.forEach()</span>
+        <span class="tag tag-js">.some()</span>
+        <span class="tag tag-js">.every()</span>
+        <span class="tag tag-js">[...new Set()]</span>
+        <span class="tag tag-js">Array.from()</span>
+      </div>
+      <ul>
+        <li><code>.filter()</code> - Retourne un nouveau tableau avec seulement les éléments qui passent le test</li>
+        <li><code>.map()</code> - Transforme chaque élément et retourne un nouveau tableau</li>
+        <li><code>[...new Set(array)]</code> - Supprime les doublons d'un tableau</li>
+      </ul>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 4 - ACCESSIBILITÉ
+    ══════════════════════════════════ -->
+    <section class="chapter" id="access-aria">
+      <p class="chapter-badge badge-access">🟢 Chapitre 4</p>
+      <h2>Accessibilité Web - WCAG & ARIA</h2>
+      <p class="intro">L'accessibilité web permet aux personnes en situation de handicap d'utiliser les sites. Les <strong>WCAG 2.1</strong> (Web Content Accessibility Guidelines) définissent 4 principes : Perceptible, Utilisable, Compréhensible, Robuste (POUR).</p>
+
+      <h3 id="access-pratiques">Les attributs ARIA essentiels</h3>
+      <p>ARIA (Accessible Rich Internet Applications) complète le HTML sémantique là où il ne suffit pas.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Attribut</th><th>Valeurs</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td><code>aria-label</code></td><td>Texte</td><td>Étiquette pour les éléments sans texte visible</td></tr>
+            <tr><td><code>aria-labelledby</code></td><td>ID d'un élément</td><td>Référencer un titre existant</td></tr>
+            <tr><td><code>aria-describedby</code></td><td>ID d'un élément</td><td>Description complémentaire (aide/erreur)</td></tr>
+            <tr><td><code>aria-expanded</code></td><td><code>true</code> / <code>false</code></td><td>État ouvert/fermé d'un menu/accordéon</td></tr>
+            <tr><td><code>aria-hidden</code></td><td><code>true</code></td><td>Masquer aux technologies d'assistance</td></tr>
+            <tr><td><code>aria-live</code></td><td><code>polite</code> / <code>assertive</code></td><td>Annonce les changements dynamiques</td></tr>
+            <tr><td><code>aria-current</code></td><td><code>page</code> / <code>true</code></td><td>Indique l'élément actif dans une navigation</td></tr>
+            <tr><td><code>role</code></td><td><code>button</code>, <code>list</code>, <code>alert</code>…</td><td>Redéfinir le rôle sémantique</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Checklist accessibilité</h3>
+      <ul class="checklist">
+        <li>Utiliser des balises HTML sémantiques (nav, main, header, footer…)</li>
+        <li>Tous les éléments interactifs sont accessibles au clavier (Tab, Enter, Espace, Echap)</li>
+        <li>Le focus est visible et ne jamais faire <code>outline: none</code> sans alternative</li>
+        <li>Chaque image a un attribut <code>alt</code> (vide si décorative)</li>
+        <li>Ratio de contraste ≥ 4.5:1 pour le texte normal, ≥ 3:1 pour le texte large (WCAG AA)</li>
+        <li>Les formulaires ont des <code>&lt;label&gt;</code> liés aux <code>&lt;input&gt;</code></li>
+        <li>La langue est déclarée avec <code>lang="fr"</code></li>
+        <li>Les messages d'erreur sont annoncés avec <code>aria-live</code></li>
+        <li>Pas d'informations transmises uniquement par la couleur</li>
+        <li class="warn">Éviter les liens "Cliquez ici" - utiliser des textes descriptifs</li>
+        <li class="bad">Ne jamais supprimer le style de focus sans le remplacer</li>
+      </ul>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 5 - RESPONSIVE
+    ══════════════════════════════════ -->
+    <section class="chapter" id="resp-mediaqueries">
+      <p class="chapter-badge badge-resp">🟣 Chapitre 5</p>
+      <h2>Responsive Design</h2>
+      <p class="intro">Le Responsive Web Design adapte la mise en page à tous les écrans. La meta viewport, les media queries, et les unités relatives sont les 3 piliers.</p>
+
+      <h3>Breakpoints recommandés</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nom</th><th>Breakpoint</th><th>Cibles typiques</th></tr></thead>
+          <tbody>
+            <tr><td>Mobile</td><td>< 480px</td><td>Smartphones (portrait)</td></tr>
+            <tr><td>Mobile large</td><td>480px – 600px</td><td>Grands smartphones</td></tr>
+            <tr><td>Tablette</td><td>600px – 900px</td><td>Tablettes, petit laptop</td></tr>
+            <tr><td>Desktop</td><td>900px – 1200px</td><td>Laptops standard</td></tr>
+            <tr><td>Large desktop</td><td>> 1200px</td><td>Grands écrans</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="resp-mobile-first">Approche Mobile-First</h3>
+      <p>On écrit d'abord les styles pour mobile, puis on <strong>ajoute des media queries pour les plus grands écrans</strong> avec <code>min-width</code>.</p>
+      <div class="box box-tip">
+        <div class="box-title">💡 Mobile-first vs Desktop-first</div>
+        <p><strong>Mobile-first</strong> (<code>min-width</code>) : meilleure performance sur mobile, approche progressive recommandée.<br>
+        <strong>Desktop-first</strong> (<code>max-width</code>) : utile pour refactoriser un site existant desktop.</p>
+      </div>
+
+      <h3>Unités relatives indispensables</h3>
+      <ul>
+        <li><code>%</code> - Relatif au parent (largeurs fluides)</li>
+        <li><code>em</code> - Relatif à la taille de police du parent</li>
+        <li><code>rem</code> - Relatif à la taille de police racine (<code>html</code>) - Préférable</li>
+        <li><code>vw / vh</code> - Relatif à la largeur/hauteur du viewport</li>
+        <li><code>clamp(min, val, max)</code> - Valeur fluide entre deux bornes : <code>font-size: clamp(1rem, 2.5vw, 2rem)</code></li>
+      </ul>
+
+      <h3>Images responsives</h3>
+      <ul>
+        <li><code>max-width: 100%</code> sur toutes les images par défaut</li>
+        <li><code>&lt;img srcset="..."&gt;</code> - Charger la bonne résolution selon l'écran</li>
+        <li><code>&lt;picture&gt;</code> + <code>&lt;source media="..."&gt;</code> - Images différentes selon le viewport</li>
+      </ul>
+
+      <h3>Grille responsive automatique</h3>
+      <p>La combinaison la plus puissante pour une grille qui s'adapte sans media query :</p>
+      <p><code>grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))</code></p>
+      <p>Cela crée autant de colonnes que possible d'au moins 280px, et les étire pour remplir l'espace disponible.</p>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CHAPITRE 6 - BONNES PRATIQUES
+    ══════════════════════════════════ -->
+    <section class="chapter" id="bp-code">
+      <p class="chapter-badge badge-bp">🔴 Chapitre 6</p>
+      <h2>Bonnes pratiques & Qualité</h2>
+      <p class="intro">Un code de qualité professionnelle est <strong>lisible, maintenable, performant</strong> et sécurisé. Ces pratiques sont évaluées dans la grille EC01.</p>
+
+      <h3>Organisation du code HTML/CSS/JS</h3>
+      <ul class="checklist">
+        <li>Indentation cohérente (2 ou 4 espaces, au choix mais uniforme)</li>
+        <li>Noms de classes CSS descriptifs et cohérents (BEM, ou camelCase)</li>
+        <li>Commentaires expliquant le <em>pourquoi</em>, pas le <em>quoi</em></li>
+        <li>Fonctions JS courtes avec un seul rôle (<em>single responsibility</em>)</li>
+        <li>Noms de variables et fonctions clairs : <code>fetchFormations()</code> pas <code>fF()</code></li>
+        <li>Séparation des préoccupations : HTML structure, CSS présentation, JS comportement</li>
+      </ul>
+
+      <h3 id="bp-perf">Performance</h3>
+      <ul>
+        <li>Charger les scripts JS à la fin du <code>&lt;body&gt;</code> ou avec <code>defer</code></li>
+        <li>Minifier CSS et JS en production</li>
+        <li>Compresser les images (WebP, AVIF)</li>
+        <li>Utiliser <code>loading="lazy"</code> sur les images hors viewport</li>
+        <li>Éviter les requêtes fetch redondantes - mettre en cache si possible</li>
+        <li>Animer avec <code>transform</code> et <code>opacity</code> uniquement (GPU)</li>
+      </ul>
+
+      <h3 id="bp-seo">SEO de base</h3>
+      <ul>
+        <li><code>&lt;title&gt;</code> unique et descriptif (50-60 caractères)</li>
+        <li><code>&lt;meta name="description"&gt;</code> (150-160 caractères)</li>
+        <li>Un seul <code>&lt;h1&gt;</code> par page, contenant le mot-clé principal</li>
+        <li>URLs propres et lisibles</li>
+        <li>Attributs <code>alt</code> descriptifs sur les images</li>
+        <li>Données structurées (JSON-LD) pour les moteurs de recherche</li>
+      </ul>
+
+      <h3>Sécurité front-end minimale</h3>
+      <ul class="checklist">
+        <li>Ne jamais insérer de données utilisateur directement dans <code>innerHTML</code> - risque XSS</li>
+        <li>Utiliser <code>textContent</code> pour les textes non-HTML</li>
+        <li>Toujours valider les données côté serveur (la validation JS côté client seule ne suffit pas)</li>
+        <li class="bad">Ne jamais stocker de données sensibles dans <code>localStorage</code></li>
+      </ul>
+
+      <div class="box box-info">
+        <div class="box-title">ℹ Niveaux d'importance pour l'examen EC01</div>
+        <p>La grille évalue : structure HTML5 et W3C (C1), qualité CSS et UX (C2), responsive (C3), JavaScript et ECMAScript (C4), AJAX/fetch (C5). Chaque critère vaut entre 0 et 5 points pour un total sur 55 points.</p>
+      </div>
+
+      <h3>Niveau de maîtrise recommandé</h3>
+      <div class="level-bar"><span class="level-bar-label">HTML sémantique</span><div class="level-bar-track"><div class="level-bar-fill" style="width:95%"></div></div></div>
+      <div class="level-bar"><span class="level-bar-label">CSS Flexbox/Grid</span><div class="level-bar-track"><div class="level-bar-fill" style="width:90%"></div></div></div>
+      <div class="level-bar"><span class="level-bar-label">Responsive design</span><div class="level-bar-track"><div class="level-bar-fill" style="width:88%"></div></div></div>
+      <div class="level-bar"><span class="level-bar-label">JavaScript ES6+</span><div class="level-bar-track"><div class="level-bar-fill" style="width:85%"></div></div></div>
+      <div class="level-bar"><span class="level-bar-label">AJAX / fetch</span><div class="level-bar-track"><div class="level-bar-fill" style="width:80%"></div></div></div>
+      <div class="level-bar"><span class="level-bar-label">Accessibilité ARIA</span><div class="level-bar-track"><div class="level-bar-fill" style="width:75%"></div></div></div>
+    </section>
+
+  </div><!-- /.main-inner -->
+</div><!-- /.main -->
+</div><!-- /.layout -->
+
+<script>
+// Accordion FAQ
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    item.classList.toggle('open');
+  });
+});
+
+// Sidebar active link au scroll
+const sections = document.querySelectorAll('section[id], h3[id]');
+const sidebarLinks = document.querySelectorAll('.sidebar a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      sidebarLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-60px 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

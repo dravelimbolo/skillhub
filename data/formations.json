@@ -1,0 +1,52 @@
+{
+  "formations": [
+    {
+      "title": "Introduction au HTML5",
+      "category": "Développement Web",
+      "duration": "4h",
+      "level": "Débutant"
+    },
+    {
+      "title": "CSS3 et mise en page moderne",
+      "category": "Développement Web",
+      "duration": "6h",
+      "level": "Débutant"
+    },
+    {
+      "title": "JavaScript Fundamentals",
+      "category": "Développement Web",
+      "duration": "8h",
+      "level": "Intermédiaire"
+    },
+    {
+      "title": "Accessibilité Web (WCAG)",
+      "category": "Qualité Web",
+      "duration": "3h",
+      "level": "Intermédiaire"
+    },
+    {
+      "title": "Responsive Design avec Flexbox et Grid",
+      "category": "UX / Front-end",
+      "duration": "5h",
+      "level": "Intermédiaire"
+    },
+    {
+      "title": "Optimisation SEO pour sites web",
+      "category": "Référencement",
+      "duration": "4h",
+      "level": "Débutant"
+    },
+    {
+      "title": "Performance Web et Core Web Vitals",
+      "category": "Performance",
+      "duration": "5h",
+      "level": "Avancé"
+    },
+    {
+      "title": "Bonnes pratiques JavaScript",
+      "category": "Développement Web",
+      "duration": "6h",
+      "level": "Avancé"
+    }
+  ]
+}
